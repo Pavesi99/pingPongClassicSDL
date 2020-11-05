@@ -45,11 +45,11 @@ void carregaMenu (SDL_Window* janela, SDL_Renderer* renderizador, bool menu) {
                 break;
 
                 case SDL_MOUSEBUTTONDOWN:
-                    if(evento.button.y > 20 && evento.button.y < 100) {
+                    if(evento.button.y > 25 && evento.button.y < 100 && evento.button.x > 299 && evento.button.x < 475) {
                         SDL_Log("Iniciar Pressionado");
-                    } else if (evento.button.y > 115  && evento.button.y < 200) {
+                    } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
                         SDL_Log("Opcoes pressionado");
-                    } else if (evento.button.y > 250 && evento.button.y < 300) {
+                    } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
                         SDL_Log("Sair...");
                         SDL_Quit();
                     }
@@ -59,22 +59,19 @@ void carregaMenu (SDL_Window* janela, SDL_Renderer* renderizador, bool menu) {
         }
 
         SDL_Rect iniciarOri = {0, 0, 500, 100};
-        SDL_Rect iniciarDest = {100, 20, 615, 101};
+        SDL_Rect iniciarDest = {0, 20, 615, 101};
         SDL_RenderCopy(renderizador, iniciar, &iniciarOri, &iniciarDest);
-        SDL_RenderPresent(renderizador);
 
         SDL_Rect opcoesOri = {0, 0, 490, 100};
-        SDL_Rect opcoesDest = {100, 125, 615, 101};
+        SDL_Rect opcoesDest = {0, 125, 615, 101};
         SDL_RenderCopy(renderizador, opcoes, &opcoesOri, &opcoesDest);
-        SDL_RenderPresent(renderizador);
 
         SDL_Rect sairOri = {0, 0, 490, 100};
-        SDL_Rect sairDest = {105, 225, 615, 101};
+        SDL_Rect sairDest = {0, 225, 615, 101};
         SDL_RenderCopy(renderizador, sair, &sairOri, &sairDest);
+
         SDL_RenderPresent(renderizador);
-
         SDL_DestroyWindow(janela);
-
 
     } while (menu);
 
@@ -242,7 +239,6 @@ int main()
     setInitialBallPosition(&ball,windowWidth, windowHeight);
     setInitialPlayersPositions(&player1,&player2);
 
-     //SDL_RenderCopy(renderizador, imgBackground, NULL, NULL);
      SDL_RenderCopy(renderizador, player1.texture, &player1.origem, &player1.destino);
      SDL_RenderCopy(renderizador, player2.texture, &player2.origem, &player2.destino);
      SDL_RenderCopy(renderizador, ball.texture, &ball.origem, &ball.destino);
