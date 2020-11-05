@@ -30,6 +30,60 @@ SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador) {
     return textura;
 }
 
+void carregaMenu (SDL_Window* janela, SDL_Renderer* renderizador, bool menu) {
+
+    SDL_Texture* iniciar = carregaImagemBMP("assets/menu/iniciar.bmp", renderizador);
+    SDL_Texture* opcoes = carregaImagemBMP("assets/menu/opcoes.bmp", renderizador);
+    SDL_Texture* sair = carregaImagemBMP("assets/menu/sair.bmp", renderizador);
+
+    do {
+        SDL_Event evento;
+        while (SDL_PollEvent(&evento)) {
+            switch(evento.type) {
+                case SDL_QUIT:
+                    menu = false;
+                break;
+
+                case SDL_MOUSEBUTTONDOWN:
+                    if(evento.button.y > 20 && evento.button.y < 100) {
+                        SDL_Log("Iniciar Pressionado");
+                    } else if (evento.button.y > 115  && evento.button.y < 200) {
+                        SDL_Log("Opcoes pressionado");
+                    } else if (evento.button.y > 250 && evento.button.y < 300) {
+                        SDL_Log("Sair...");
+                        SDL_Quit();
+                    }
+
+
+            }
+        }
+
+        SDL_Rect iniciarOri = {0, 0, 500, 100};
+        SDL_Rect iniciarDest = {100, 20, 615, 101};
+        SDL_RenderCopy(renderizador, iniciar, &iniciarOri, &iniciarDest);
+        SDL_RenderPresent(renderizador);
+
+        SDL_Rect opcoesOri = {0, 0, 490, 100};
+        SDL_Rect opcoesDest = {100, 125, 615, 101};
+        SDL_RenderCopy(renderizador, opcoes, &opcoesOri, &opcoesDest);
+        SDL_RenderPresent(renderizador);
+
+        SDL_Rect sairOri = {0, 0, 490, 100};
+        SDL_Rect sairDest = {105, 225, 615, 101};
+        SDL_RenderCopy(renderizador, sair, &sairOri, &sairDest);
+        SDL_RenderPresent(renderizador);
+
+        SDL_DestroyWindow(janela);
+
+
+    } while (menu);
+
+    SDL_DestroyWindow(janela);
+    SDL_DestroyTexture(iniciar);
+    SDL_DestroyTexture(opcoes);
+    SDL_DestroyTexture(sair);
+}
+
 void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 switch (evento->type) {
                 case SDL_KEYDOWN:
@@ -69,7 +123,7 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
 
 bool movePlayer(player* player, int windowWidth, SDL_Renderer* renderizador){
     if(player->direita){
-        player->destino.x ++;
+        player->destino.x += 5;
         if(player->destino.x > (windowWidth - player->destino.w)){
             player->destino.x = (windowWidth - player->destino.w);
         }
@@ -79,7 +133,7 @@ bool movePlayer(player* player, int windowWidth, SDL_Renderer* renderizador){
     }
 
     if(player->esquerda){
-        player->destino.x --;
+        player->destino.x -= 5;
         if(player->destino.x < 0){
             player->destino.x = 0;
         }
@@ -122,7 +176,6 @@ void moveBall(ball* ball, int windowWidth, int windowHeight, SDL_Renderer* rende
     }
 }
 
-
 void setInitialPlayersPositions(player* player1, player* player2){
     player2->origem.h = 200;
     player2->origem.w = 800;
@@ -157,11 +210,14 @@ void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight){
     ball->destino.y = windowHeight / 2;
 }
 
+
+
 int main()
 {
     int windowWidth  = 800;
     int windowHeight = 600;
     bool gameOver = false;
+    bool menu = true;
 
     player player1;
     player player2;
@@ -170,14 +226,18 @@ int main()
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_Window* janela = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0);
+    SDL_Window* janelaMenu = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0);
     SDL_Renderer* renderizador = SDL_CreateRenderer(janela, -1, SDL_RENDERER_ACCELERATED);
-    //SDL_Texture* imgBackground = carregaImagemBMP("assets/elementosJogo/Background.bmp", renderizador);
+
+    carregaMenu(janelaMenu, renderizador, menu);
+
     SDL_Texture* imgPlayer1 = carregaImagemBMP("assets/elementosJogo/Stick.bmp", renderizador);
     SDL_Texture* imgPlayer2 = carregaImagemBMP("assets/elementosJogo/Stick01.bmp", renderizador);
     SDL_Texture* imgBall = carregaImagemBMP("assets/elementosJogo/Ball.bmp", renderizador);
     player1.texture = imgPlayer1;
     player2.texture = imgPlayer2;
     ball.texture = imgBall;
+
 
     setInitialBallPosition(&ball,windowWidth, windowHeight);
     setInitialPlayersPositions(&player1,&player2);
@@ -200,11 +260,11 @@ int main()
         }
 
         if(movePlayer(&player1, windowWidth,renderizador)){
-           //SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
+           SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
         }
 
         if(movePlayer(&player2, windowWidth,renderizador)){
-             //SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
+             SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
         }
 
         SDL_RenderPresent(renderizador);
