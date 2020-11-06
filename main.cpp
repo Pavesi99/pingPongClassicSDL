@@ -13,9 +13,9 @@ struct player {
 };
 
 struct ball {
-    bool esquerda = true;
+    bool esquerda = false;
     bool direita = false;
-    bool cima = false;
+    bool cima = true;
     bool baixo = false;
     SDL_Rect destino;
     SDL_Rect origem;
@@ -141,36 +141,50 @@ bool movePlayer(player* player, int windowWidth, SDL_Renderer* renderizador){
     return false;
 }
 
-void moveBall(ball* ball, int windowWidth, int windowHeight, SDL_Renderer* renderizador){
+bool moveBall(ball* ball, int windowWidth, int windowHeight, SDL_Renderer* renderizador){
+    bool movimento;
     if(ball->direita){
-        ball->destino.x ++;
+        ball->destino.x +=6;
         if(ball->destino.x > (windowWidth - ball->destino.w)){
             ball->direita = false;
             ball->esquerda = true;
         }
+        SDL_RenderClear(renderizador);
+        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
+        movimento = true;
     }
 
     if(ball->esquerda){
-        ball->destino.x --;
+        ball->destino.x -=6;
         if(ball->destino.x < 0){
             ball->esquerda = false;
             ball->direita = true;
         }
+        SDL_RenderClear(renderizador);
+        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
+        movimento = true;
     }
 
     if(ball->cima){
-        ball->destino.y--;
+        ball->destino.y-=6;
         if(ball->destino.y < -5){
             //ponto player1
         }
+        SDL_RenderClear(renderizador);
+        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
+        movimento = true;
     }
 
     if(ball->baixo){
-        ball->destino.y ++;
+        ball->destino.y +=6;
         if(ball->destino.y > (windowHeight + 50)){
             //ponto player2
         }
+        SDL_RenderClear(renderizador);
+        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
+        movimento = true;
     }
+    return movimento;
 }
 
 void setInitialPlayersPositions(player* player1, player* player2){
@@ -191,8 +205,8 @@ void setInitialPlayersPositions(player* player1, player* player2){
 
     player1->destino.h = 40;
     player1->destino.w = player1->origem.w / 8;
-    player1->destino.x = 600;
-    player1->destino.y = 580;
+    player1->destino.x = 300;
+    player1->destino.y = 570;
 }
 
 void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight){
@@ -201,10 +215,50 @@ void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight){
     ball->origem.x = 0;
     ball->origem.y = 0;
 
-    ball->destino.h = 40;
-    ball->destino.w = ball->origem.w / 8;
+    ball->destino.h = ball->origem.w / 15;
+    ball->destino.w = ball->origem.w / 16;
     ball->destino.x = windowWidth / 2;
     ball->destino.y = windowHeight / 2;
+}
+
+void checkBallCollision(ball* ball, player* player1, player* player2){
+    if(ball->destino.x >= player2->destino.x
+            && ball->destino.x <= (player2->destino.x + player2->destino.w)
+            && ball->destino.y <= (player2->destino.y + (player2->destino.h /2))
+            ){
+        ball->cima = false;
+        ball->baixo = true;
+
+        if(ball->destino.x <= (player2->destino.x + 5)){
+            ball->esquerda = true;
+            ball->direita = false;
+        }else if(ball->destino.x >= (player2->destino.x + player2->destino.w - 5) ){
+            ball->esquerda = false;
+            ball->direita = true;
+        }else {
+            if( ball->esquerda == false && ball->direita == false){
+                ball->esquerda = true;
+            }
+        }
+    }
+    if(ball->destino.x >= player1->destino.x
+            && ball->destino.x <= (player1->destino.x + player1->destino.w)
+            && ball->destino.y >= (player1->destino.y - (player1->destino.h / 2))
+            ){
+        ball->cima = true;
+        ball->baixo = false;
+        if(ball->destino.x <= (player1->destino.x + 5)){
+            ball->esquerda = true;
+            ball->direita = false;
+        }else if(ball->destino.x >= (player1->destino.x + player1->destino.w  - 5)){
+            ball->esquerda = false;
+            ball->direita = true;
+        }else {
+            if( ball->esquerda == false && ball->direita == false){
+                ball->esquerda = true;
+            }
+        }
+    }
 }
 
 
@@ -262,6 +316,13 @@ int main()
         if(movePlayer(&player2, windowWidth,renderizador)){
              SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
         }
+
+        if(moveBall(&ball,windowWidth,windowHeight,renderizador)){
+            SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
+            SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
+        }
+
+        checkBallCollision(&ball,&player1,&player2);
 
         SDL_RenderPresent(renderizador);
         SDL_Delay(1000 / 60);
