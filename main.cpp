@@ -5,6 +5,7 @@
 using namespace std;
 
 struct player {
+    int pontos = 0;
     bool esquerda = false;
     bool direita = false;
     SDL_Rect destino;
@@ -118,73 +119,57 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 }
 }
 
-bool movePlayer(player* player, int windowWidth, SDL_Renderer* renderizador){
+void movePlayer(player* player, int windowWidth){
+    int velocidade = 5;
+
     if(player->direita){
-        player->destino.x += 5;
+        player->destino.x += velocidade;
         if(player->destino.x > (windowWidth - player->destino.w)){
             player->destino.x = (windowWidth - player->destino.w);
         }
-        SDL_RenderClear(renderizador);
-        SDL_RenderCopy(renderizador, player->texture, &player->origem,&player->destino );
-        return true;
     }
 
     if(player->esquerda){
-        player->destino.x -= 5;
+        player->destino.x -= velocidade;
         if(player->destino.x < 0){
             player->destino.x = 0;
         }
-        SDL_RenderClear(renderizador);
-        SDL_RenderCopy(renderizador, player->texture, &player->origem,&player->destino );
-        return true;
     }
-    return false;
 }
 
-bool moveBall(ball* ball, int windowWidth, int windowHeight, SDL_Renderer* renderizador){
-    bool movimento;
+int moveBall(ball* ball, int windowWidth, int windowHeight){
+    int velocidade = 6;
+
     if(ball->direita){
-        ball->destino.x +=6;
+        ball->destino.x +=velocidade;
         if(ball->destino.x > (windowWidth - ball->destino.w)){
             ball->direita = false;
             ball->esquerda = true;
         }
-        SDL_RenderClear(renderizador);
-        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
-        movimento = true;
     }
 
     if(ball->esquerda){
-        ball->destino.x -=6;
+        ball->destino.x -=velocidade;
         if(ball->destino.x < 0){
             ball->esquerda = false;
             ball->direita = true;
         }
-        SDL_RenderClear(renderizador);
-        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
-        movimento = true;
     }
 
     if(ball->cima){
-        ball->destino.y-=6;
-        if(ball->destino.y < -5){
-            //ponto player1
+        ball->destino.y-=velocidade;
+        if(ball->destino.y < -20){
+            return 1;
         }
-        SDL_RenderClear(renderizador);
-        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
-        movimento = true;
     }
 
     if(ball->baixo){
-        ball->destino.y +=6;
-        if(ball->destino.y > (windowHeight + 50)){
-            //ponto player2
-        }
-        SDL_RenderClear(renderizador);
-        SDL_RenderCopy(renderizador, ball->texture, &ball->origem,&ball->destino );
-        movimento = true;
+        ball->destino.y +=velocidade;
+        if(ball->destino.y > (windowHeight + 20)){
+           return 2;
+        }     
     }
-    return movimento;
+    return 0;
 }
 
 void setInitialPlayersPositions(player* player1, player* player2){
@@ -299,6 +284,8 @@ int main()
 
     while (!gameOver) {
 
+        SDL_RenderClear(renderizador);
+
         SDL_Event evento;
         while(SDL_PollEvent(&evento) > 0){
             switch (evento.type) {
@@ -309,20 +296,28 @@ int main()
             getPlayersMovement(&evento,&player1,&player2);
         }
 
-        if(movePlayer(&player1, windowWidth,renderizador)){
-           SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
-        }
+        movePlayer(&player1, windowWidth);
 
-        if(movePlayer(&player2, windowWidth,renderizador)){
-             SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
-        }
+        movePlayer(&player2, windowWidth);
 
-        if(moveBall(&ball,windowWidth,windowHeight,renderizador)){
-            SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
-            SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
+        switch(moveBall(&ball,windowWidth,windowHeight)){
+            case 1:
+                player1.pontos++;
+                //bola no meio, restart
+            break;
+            case 2:
+                player2.pontos++;
+                //bola no meio, restart
+            break;
         }
+        cout << "jogador 1:" << player1.pontos;
+        cout << "jogador 2:" << player2.pontos;
 
         checkBallCollision(&ball,&player1,&player2);
+
+        SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
+        SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
+        SDL_RenderCopy(renderizador, ball.texture, &ball.origem, &ball.destino);
 
         SDL_RenderPresent(renderizador);
         SDL_Delay(1000 / 60);
