@@ -137,7 +137,12 @@ void movePlayer(player* player, int windowWidth){
     }
 }
 
-int moveBall(ball* ball, int windowWidth, int windowHeight){
+int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPoint = 0 ){
+
+    if (*waitTimeAfterPoint > 0){
+        return 3;
+    }
+
     int velocidade = 6;
 
     if(ball->direita){
@@ -192,6 +197,13 @@ void setInitialPlayersPositions(player* player1, player* player2){
     player1->destino.w = player1->origem.w / 8;
     player1->destino.x = 300;
     player1->destino.y = 570;
+}
+
+void setBallDirectionAfterPoint(ball* ball){
+    ball->esquerda = false;
+    ball->direita = false;
+    ball->cima = !ball->cima;
+    ball->baixo = !ball->baixo;
 }
 
 void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight){
@@ -254,6 +266,7 @@ int main()
     int windowHeight = 600;
     bool gameOver = false;
     bool menu = true;
+    int waitTimeAfterPoint = 0;
 
     player player1;
     player player2;
@@ -300,18 +313,7 @@ int main()
 
         movePlayer(&player2, windowWidth);
 
-        switch(moveBall(&ball,windowWidth,windowHeight)){
-            case 1:
-                player1.pontos++;
-                //bola no meio, restart
-            break;
-            case 2:
-                player2.pontos++;
-                //bola no meio, restart
-            break;
-        }
-        cout << "jogador 1:" << player1.pontos;
-        cout << "jogador 2:" << player2.pontos;
+
 
         checkBallCollision(&ball,&player1,&player2);
 
@@ -321,6 +323,37 @@ int main()
 
         SDL_RenderPresent(renderizador);
         SDL_Delay(1000 / 60);
+
+        switch(moveBall(&ball,windowWidth,windowHeight, &waitTimeAfterPoint )){
+            case 1:
+                player1.pontos++;
+                setBallDirectionAfterPoint(&ball);
+                setInitialBallPosition(&ball,windowWidth, windowHeight);
+                waitTimeAfterPoint = 180;
+
+                //bola inicia indo para baixo
+                //bola no meio, restart
+                cout << "jogador 1:" << player1.pontos << "\n";
+                cout << "jogador 2:" << player2.pontos << "\n";
+
+            break;
+            case 2:
+                player2.pontos++;
+                setBallDirectionAfterPoint(&ball);
+                setInitialBallPosition(&ball,windowWidth, windowHeight);
+
+                waitTimeAfterPoint = 180;
+
+                //bola inicia indo para cima
+                //bola no meio, restart
+                cout << "jogador 1:" << player1.pontos << "\n";
+                cout << "jogador 2:" << player2.pontos << "\n";
+            break;
+            case 3:
+            waitTimeAfterPoint--;
+            break;
+        }
+
     }
 
     SDL_DestroyWindow(janela);
