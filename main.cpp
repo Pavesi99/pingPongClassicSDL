@@ -150,6 +150,7 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
         if(ball->destino.x > (windowWidth - ball->destino.w)){
             ball->direita = false;
             ball->esquerda = true;
+            return 4;
         }
     }
 
@@ -158,6 +159,7 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
         if(ball->destino.x < 0){
             ball->esquerda = false;
             ball->direita = true;
+            return 4;
         }
     }
 
@@ -218,25 +220,28 @@ void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight){
     ball->destino.y = windowHeight / 2;
 }
 
-void checkBallCollision(ball* ball, player* player1, player* player2){
+bool checkBallCollision(ball* ball, player* player1, player* player2 ){
     if(ball->destino.x >= player2->destino.x
             && ball->destino.x <= (player2->destino.x + player2->destino.w)
             && ball->destino.y <= (player2->destino.y + (player2->destino.h /2))
             ){
         ball->cima = false;
         ball->baixo = true;
-
         if(ball->destino.x <= (player2->destino.x + 5)){
             ball->esquerda = true;
             ball->direita = false;
+
         }else if(ball->destino.x >= (player2->destino.x + player2->destino.w - 5) ){
             ball->esquerda = false;
             ball->direita = true;
+
         }else {
             if( ball->esquerda == false && ball->direita == false){
                 ball->esquerda = true;
+
             }
         }
+        return true;
     }
     if(ball->destino.x >= player1->destino.x
             && ball->destino.x <= (player1->destino.x + player1->destino.w)
@@ -244,18 +249,24 @@ void checkBallCollision(ball* ball, player* player1, player* player2){
             ){
         ball->cima = true;
         ball->baixo = false;
+
         if(ball->destino.x <= (player1->destino.x + 5)){
             ball->esquerda = true;
             ball->direita = false;
+
         }else if(ball->destino.x >= (player1->destino.x + player1->destino.w  - 5)){
             ball->esquerda = false;
             ball->direita = true;
+
         }else {
             if( ball->esquerda == false && ball->direita == false){
                 ball->esquerda = true;
+
             }
         }
+        return true;
     }
+    return false;
 }
 
 
@@ -273,6 +284,8 @@ int main()
     ball ball;
 
     SDL_Init(SDL_INIT_EVERYTHING);
+
+
 
     SDL_Window* janela = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0);
     SDL_Window* janelaMenu = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0);
@@ -295,6 +308,22 @@ int main()
      SDL_RenderCopy(renderizador, player2.texture, &player2.origem, &player2.destino);
      SDL_RenderCopy(renderizador, ball.texture, &ball.origem, &ball.destino);
 
+     // load som de quando bate no jogador a bola
+     SDL_AudioSpec paddleHitSpec;
+     Uint32 paddleHitLength;
+     Uint8 *paddleHitBuffer;
+
+     SDL_AudioSpec wallHitSpec;
+     Uint32 wallHitLength;
+     Uint8 *wallHitBuffer;
+
+     SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleHitSpec, &paddleHitBuffer, &paddleHitLength);
+     SDL_LoadWAV("assets/som/WallHit.wav", &wallHitSpec, &wallHitBuffer, &wallHitLength);
+
+     // open audio device
+     SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
+     SDL_AudioDeviceID wallHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
+
     while (!gameOver) {
 
         SDL_RenderClear(renderizador);
@@ -313,9 +342,11 @@ int main()
 
         movePlayer(&player2, windowWidth);
 
-
-
-        checkBallCollision(&ball,&player1,&player2);
+        if(checkBallCollision(&ball,&player1,&player2)){
+            SDL_ClearQueuedAudio(paddleHitId);
+            SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+            SDL_PauseAudioDevice(paddleHitId, 0);
+        }
 
         SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
         SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
@@ -350,7 +381,12 @@ int main()
                 cout << "jogador 2:" << player2.pontos << "\n";
             break;
             case 3:
-            waitTimeAfterPoint--;
+                waitTimeAfterPoint--;
+            break;
+            case 4:
+                SDL_ClearQueuedAudio(wallHitId);
+                SDL_QueueAudio(wallHitId, wallHitBuffer, wallHitLength);
+                SDL_PauseAudioDevice(wallHitId, 0);
             break;
         }
 
