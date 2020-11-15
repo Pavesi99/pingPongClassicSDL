@@ -5,7 +5,8 @@ CONFIG -= qt
 
 SOURCES += \
         game.cpp \
-        main.cpp
+        main.cpp \
+        menu.cpp
 
 macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/sdl2/2.0.12_1/lib/ -lSDL2
 
@@ -20,7 +21,8 @@ INCLUDEPATH += $$PWD/../SDL2-2.0.9/i686-w64-mingw32/include
 DEPENDPATH += $$PWD/../SDL2-2.0.9/i686-w64-mingw32/include
 
 HEADERS += \
-    game.h
+    game.h \
+    menu.h
 
 win32: LIBS += -L$$PWD/../SDL2_ttf-2.0.15/i686-w64-mingw32/lib/ -lSDL2_ttf
 

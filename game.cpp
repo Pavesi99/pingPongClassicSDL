@@ -1,12 +1,11 @@
 #include "game.h"
 #include <SDL2/SDL_ttf.h>
 
-
-/*SDL_Texture* transformaSurface (SDL_Renderer* renderizador, char chat) {
-    TTF_Font *fonte = TTF_OpenFont("arial.ttf", 24); // Defne fonte e seu tamanho
+/*SDL_Texture* criaFonte (SDL_Renderer* renderizador, const char* chat) {
+    TTF_Font *fonte = TTF_OpenFont("arial.ttf", 12); // Defne fonte e seu tamanho
     SDL_Color corFonte = {255, 255, 255, 255}; // Define a cor da fonte
 
-    SDL_Surface* texto = TTF_RenderText_Solid(fonte, chat, corFonte);
+    SDL_Surface* texto = TTF_RenderText_Solid(fonte, chat , corFonte);
     SDL_Texture* textura = SDL_CreateTextureFromSurface(renderizador, texto);
 
     SDL_FreeSurface(texto);
@@ -61,17 +60,16 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
 }
 
 void movePlayer(player* player, int windowWidth){
-    int velocidade = 5;
 
     if(player->direita){
-        player->destino.x += velocidade;
+        player->destino.x += player->velocidade;
         if(player->destino.x > (windowWidth - player->destino.w)){
             player->destino.x = (windowWidth - player->destino.w);
         }
     }
 
     if(player->esquerda){
-        player->destino.x -= velocidade;
+        player->destino.x -= player->velocidade;
         if(player->destino.x < 0){
             player->destino.x = 0;
         }
@@ -83,10 +81,8 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
         return 3;
     }
 
-    int velocidade = 6;
-
     if(ball->direita){
-        ball->destino.x +=velocidade;
+        ball->destino.x += ball->velocidade;
         if(ball->destino.x > (windowWidth - ball->destino.w)){
             ball->direita = false;
             ball->esquerda = true;
@@ -95,7 +91,7 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
     }
 
     if(ball->esquerda){
-        ball->destino.x -=velocidade;
+        ball->destino.x -= ball->velocidade;
         if(ball->destino.x < 0){
             ball->esquerda = false;
             ball->direita = true;
@@ -104,14 +100,14 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
     }
 
     if(ball->cima){
-        ball->destino.y-=velocidade;
+        ball->destino.y-= ball->velocidade;
         if(ball->destino.y < 0){
             return 1;
         }
     }
 
     if(ball->baixo){
-        ball->destino.y +=velocidade;
+        ball->destino.y += ball->velocidade;
         if(ball->destino.y > (windowHeight - 10)){
            return 2;
         }
@@ -203,16 +199,22 @@ bool checkBallCollision(ball* ball, player* player1, player* player2){
     return false;
 }
 
+void attMoves (player* jogador, ball* bola) {
+
+}
+
 void startGame (SDL_Renderer* renderizador) {
     int windowWidth  = 800;
     int windowHeight = 600;
     bool gameOver = false;
     int waitTimeAfterPoint = 0;
 
+
     player player1;
     player player2;
     ball ball;
 
+    //SDL_Texture* pontuacao = criaFonte(renderizador, "Pontuação");
     SDL_Texture* imgPlayer1 = carregaImagemBMP("assets/elementosJogo/Stick.bmp", renderizador);
     SDL_Texture* imgPlayer2 = carregaImagemBMP("assets/elementosJogo/Stick01.bmp", renderizador);
     SDL_Texture* imgBall = carregaImagemBMP("assets/elementosJogo/Ball.bmp", renderizador);
@@ -250,7 +252,8 @@ void startGame (SDL_Renderer* renderizador) {
         SDL_Event evento;
         while(SDL_PollEvent(&evento) > 0){
             switch (evento.type) {
-                case SDL_QUIT: gameOver = true;
+                case SDL_QUIT: 
+                gameOver = true;
                 SDL_Quit();
                 break;
             }
@@ -279,13 +282,14 @@ void startGame (SDL_Renderer* renderizador) {
                 player1.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
+                setInitialPlayersPositions(&player1,&player2);
                 waitTimeAfterPoint = 180;
             break;
             case 2:
                 player2.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
-
+                setInitialPlayersPositions(&player1,&player2);
                 waitTimeAfterPoint = 180;
             break;
             case 3:
