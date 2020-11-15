@@ -4,7 +4,7 @@
 #ifndef MENU_H
 #define MENU_H
 
-void carregaMenu (SDL_Window* janela, SDL_Renderer* renderizador, bool menu);
+int carregaMenu (SDL_Renderer* renderizador);
 void optionsMenu ();
 void velocidades ();
 
