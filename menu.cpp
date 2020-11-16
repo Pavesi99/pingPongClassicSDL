@@ -13,7 +13,7 @@ int carregaMenu (SDL_Renderer* renderizador) {
     SDL_Texture* sair = carregaImagemBMP("assets/menu/sair.bmp", renderizador);
 
     do {
-        SDL_RenderCopy(renderizador);
+        SDL_RenderClear(renderizador);
         SDL_Event evento;
         while (SDL_PollEvent(&evento)) {
             switch(evento.type) {
@@ -56,7 +56,7 @@ int carregaMenu (SDL_Renderer* renderizador) {
     SDL_DestroyTexture(sair);
     SDL_DestroyRenderer(renderizador);
 
-    SDL_RenderCopy(renderizador);
+    SDL_RenderClear(renderizador);
 
     return retorno;
 }
@@ -84,7 +84,7 @@ void optionsMenu () {
                        } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
                             velocidades();
                        } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
-                           carregaMenu(janela, renderizador, opcoes);
+                           carregaMenu(renderizador);
                        }
                     break;
                }
@@ -107,7 +107,7 @@ void optionsMenu () {
        SDL_DestroyWindow(janela);
        SDL_DestroyRenderer(renderizador);
 
-       SDL_RenderCopy(renderizador);
+       SDL_RenderClear(renderizador);
 }
 
 void velocidades () {
@@ -161,7 +161,7 @@ void velocidades () {
     SDL_DestroyTexture(rapido);
     SDL_DestroyWindow(janela);
     SDL_DestroyRenderer(renderizador);
-    SDL_RenderCopy(renderizador);
+    SDL_RenderClear(renderizador);
 }
 
 
