@@ -1,7 +1,5 @@
 #include "menu.h"
 #include "game.h"
-using namespace std;
-#include <iostream>
 
 int windowWidth  = 800;
 int windowHeight = 600;
@@ -32,13 +30,11 @@ int carregaMenu (SDL_Renderer* renderizador) {
                     } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
                         optionsMenu(renderizador);
                     } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
-                        SDL_Log("Sair...");
                         retorno = 1;
                         SDL_Quit();
                     }
             }
         }
-
         SDL_Rect iniciarOri = {0, 0, 500, 100};
         SDL_Rect iniciarDest = {0, 20, 615, 101};
         SDL_RenderCopy(renderizador, iniciar, &iniciarOri, &iniciarDest);
