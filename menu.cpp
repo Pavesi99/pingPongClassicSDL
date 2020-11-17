@@ -1,5 +1,7 @@
 #include "menu.h"
 #include "game.h"
+using namespace std;
+#include <iostream>
 
 int windowWidth  = 800;
 int windowHeight = 600;
@@ -8,30 +10,31 @@ int carregaMenu (SDL_Renderer* renderizador) {
     bool menu = true;
     int retorno = 0;
 
+    SDL_RenderClear(renderizador);
+
     SDL_Texture* iniciar = carregaImagemBMP("assets/menu/iniciar.bmp", renderizador);
     SDL_Texture* opcoes = carregaImagemBMP("assets/menu/opcoes.bmp", renderizador);
     SDL_Texture* sair = carregaImagemBMP("assets/menu/sair.bmp", renderizador);
 
     do {
-        SDL_RenderCopy(renderizador);
+        //SDL_RenderCopy(renderizador);
         SDL_Event evento;
         while (SDL_PollEvent(&evento)) {
             switch(evento.type) {
                 case SDL_QUIT:
-                    menu = false;
-                    retorno = 1;
                     SDL_Quit();
                 break;
 
                 case SDL_MOUSEBUTTONDOWN:
                     if(evento.button.y > 25 && evento.button.y < 100 && evento.button.x > 299 && evento.button.x < 475) {
                         retorno = 0;
+                        menu = false;
                     } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
-                        optionsMenu();
+                        optionsMenu(renderizador);
                     } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
                         SDL_Log("Sair...");
                         retorno = 1;
-                        menu = false;
+                        SDL_Quit();
                     }
             }
         }
@@ -51,21 +54,18 @@ int carregaMenu (SDL_Renderer* renderizador) {
         SDL_RenderPresent(renderizador);
     } while (menu);
 
+    SDL_RenderClear(renderizador);
     SDL_DestroyTexture(iniciar);
     SDL_DestroyTexture(opcoes);
     SDL_DestroyTexture(sair);
-    SDL_DestroyRenderer(renderizador);
-
-    SDL_RenderCopy(renderizador);
 
     return retorno;
 }
 
-void optionsMenu () {
+void optionsMenu (SDL_Renderer* renderizador) {
     int opcoes = true;
 
-    SDL_Window* janela = SDL_CreateWindow("Opções", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0);
-    SDL_Renderer* renderizador = SDL_CreateRenderer(janela, -1, SDL_RENDERER_ACCELERATED);
+    SDL_RenderClear(renderizador);
 
     SDL_Texture* velocidade = carregaImagemBMP("assets/menu/velocidadeJogo.bmp", renderizador);
     SDL_Texture* voltar = carregaImagemBMP("assets/menu/volta.bmp", renderizador);
@@ -79,42 +79,36 @@ void optionsMenu () {
                     break;
 
                     case SDL_MOUSEBUTTONDOWN:
-                       if(evento.button.y > 25 && evento.button.y < 100 && evento.button.x > 299 && evento.button.x < 475) {
-                            SDL_Log("clique");
-                       } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
-                            velocidades();
+                       if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
+                            velocidades(renderizador);
                        } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
-                           carregaMenu(janela, renderizador, opcoes);
+                           opcoes = false;
                        }
                     break;
                }
            }
 
-           SDL_Rect velocidadesOri = {0, 0, 490, 100};
-           SDL_Rect velocidadesDest = {0, 125, 615, 101};
+           SDL_Rect velocidadesOri = {0, 0, 620, 120};
+           SDL_Rect velocidadesDest = {100, 125, 620, 101};
            SDL_RenderCopy(renderizador, velocidade, &velocidadesOri, &velocidadesDest);
 
            SDL_Rect voltaOri = {0, 0, 490, 100};
-           SDL_Rect voltaDest = {0, 225, 615, 101};
+           SDL_Rect voltaDest = {80, 225, 615, 101};
            SDL_RenderCopy(renderizador, voltar, &voltaOri, &voltaDest);
 
            SDL_RenderPresent(renderizador);
 
        } while (opcoes);
 
+       SDL_RenderClear(renderizador);
        SDL_DestroyTexture(velocidade);
        SDL_DestroyTexture(voltar);
-       SDL_DestroyWindow(janela);
-       SDL_DestroyRenderer(renderizador);
-
-       SDL_RenderCopy(renderizador);
 }
 
-void velocidades () {
+void velocidades (SDL_Renderer* renderizador) {
     bool vel = true;
 
-    SDL_Window* janela = SDL_CreateWindow("Velocidades", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0);
-    SDL_Renderer* renderizador = SDL_CreateRenderer(janela, -1, SDL_RENDERER_ACCELERATED);
+    SDL_RenderClear(renderizador);
 
     SDL_Texture* normal = carregaImagemBMP("assets/menu/modoNormal.bmp", renderizador);
     SDL_Texture* rapido = carregaImagemBMP("assets/menu/modoRapido.bmp", renderizador);
@@ -130,11 +124,11 @@ void velocidades () {
 
                  case SDL_MOUSEBUTTONDOWN:
                     if(evento.button.y > 25 && evento.button.y < 80 && evento.button.x > 180 && evento.button.x < 580) {
-                          optionsMenu();
+                        vel = false;
                     } else if (evento.button.y > 132  && evento.button.y < 202 && evento.button.x > 180 && evento.button.x < 565) {
-                          optionsMenu();
+                        vel = false;
                     } else if (evento.button.y > 250 && evento.button.y < 295 && evento.button.x > 220 && evento.button.x < 440) {
-                          optionsMenu();
+                        vel = false;
                     }
                  break;
             }
@@ -156,12 +150,8 @@ void velocidades () {
 
     } while (vel);
 
+    SDL_RenderClear(renderizador);
     SDL_DestroyTexture(normal);
     SDL_DestroyTexture(voltar);
     SDL_DestroyTexture(rapido);
-    SDL_DestroyWindow(janela);
-    SDL_DestroyRenderer(renderizador);
-    SDL_RenderCopy(renderizador);
 }
-
-

@@ -1,4 +1,5 @@
 #include "game.h"
+#include "menu.h"
 #include <SDL2/SDL_ttf.h>
 
 /*SDL_Texture* criaFonte (SDL_Renderer* renderizador, const char* chat) {
@@ -199,9 +200,7 @@ bool checkBallCollision(ball* ball, player* player1, player* player2){
     return false;
 }
 
-void attMoves (player* jogador, ball* bola) {
 
-}
 
 void startGame (SDL_Renderer* renderizador) {
     int windowWidth  = 800;
@@ -253,8 +252,7 @@ void startGame (SDL_Renderer* renderizador) {
         while(SDL_PollEvent(&evento) > 0){
             switch (evento.type) {
                 case SDL_QUIT: 
-                gameOver = true;
-                SDL_Quit();
+                    SDL_Quit();
                 break;
             }
 

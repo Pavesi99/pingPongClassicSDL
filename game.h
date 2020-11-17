@@ -34,6 +34,6 @@ void setBallDirectionAfterPoint(ball* ball);
 void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight);
 bool checkBallCollision(ball* ball, player* player1, player* player2);
 void startGame ( SDL_Renderer* renderizador);
-void attMoves (player* jogador, ball* bola);
+ball attMoves (player* jogador, ball* bola);
 
 #endif // GAME_H
