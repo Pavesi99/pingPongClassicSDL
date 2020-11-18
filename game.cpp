@@ -236,7 +236,8 @@ void startGame (SDL_Renderer* renderizador) {
         while(SDL_PollEvent(&evento) > 0){
             switch (evento.type) {
                 case SDL_QUIT: 
-                    SDL_Quit();
+                SDL_Quit();
+                exit(0);
                 break;
             }
 
