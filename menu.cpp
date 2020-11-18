@@ -40,25 +40,17 @@ int carregaMenu (SDL_Renderer* renderizador) {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if(evento.button.y > 25 && evento.button.y < 100 && evento.button.x > 299 && evento.button.x < 475) {
-                        SDL_ClearQueuedAudio(transitionId);
-                        SDL_QueueAudio(transitionId, transitionBuffer, transitionLength);
-                        SDL_PauseAudioDevice(transitionId, 0);
-
+                        executaSom(transitionId, transitionLength, transitionBuffer);
                         retorno = 0;
                         menu = false;
                     } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
-                        SDL_ClearQueuedAudio(paddleHitId);
-                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-                        SDL_PauseAudioDevice(paddleHitId, 0);
-
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         optionsMenu(renderizador);
                     } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
-                        SDL_ClearQueuedAudio(paddleHitId);
-                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-                        SDL_PauseAudioDevice(paddleHitId, 0);
-
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         retorno = 1;
                         SDL_Quit();
+                        exit(0);
                     }
             }
         }
@@ -113,16 +105,10 @@ void optionsMenu (SDL_Renderer* renderizador) {
 
                     case SDL_MOUSEBUTTONDOWN:
                        if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
-                           SDL_ClearQueuedAudio(paddleHitId);
-                           SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-                           SDL_PauseAudioDevice(paddleHitId, 0);
-
+                           executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                            velocidades(renderizador);
                        } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
-                           SDL_ClearQueuedAudio(paddleHitId);
-                           SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-                           SDL_PauseAudioDevice(paddleHitId, 0);
-
+                           executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                            opcoes = false;
                        }
                     break;
@@ -174,22 +160,13 @@ void velocidades (SDL_Renderer* renderizador) {
 
                  case SDL_MOUSEBUTTONDOWN:
                     if(evento.button.y > 25 && evento.button.y < 80 && evento.button.x > 180 && evento.button.x < 580) {
-                        SDL_ClearQueuedAudio(paddleHitId);
-                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-                        SDL_PauseAudioDevice(paddleHitId, 0);
-
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         vel = false;
                     } else if (evento.button.y > 132  && evento.button.y < 202 && evento.button.x > 180 && evento.button.x < 565) {
-                        SDL_ClearQueuedAudio(paddleHitId);
-                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-                        SDL_PauseAudioDevice(paddleHitId, 0);
-
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         vel = false;
                     } else if (evento.button.y > 250 && evento.button.y < 295 && evento.button.x > 220 && evento.button.x < 440) {
-                        SDL_ClearQueuedAudio(paddleHitId);
-                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-                        SDL_PauseAudioDevice(paddleHitId, 0);
-
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         vel = false;
                     }
                  break;

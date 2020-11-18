@@ -187,7 +187,11 @@ bool checkBallCollision(ball* ball, player* player1, player* player2){
     return false;
 }
 
-
+void executaSom (SDL_AudioDeviceID id,  Uint32 length, Uint8 *buffer) {
+    SDL_ClearQueuedAudio(id);
+    SDL_QueueAudio(id, buffer, length);
+    SDL_PauseAudioDevice(id, 0);
+}
 
 void startGame (SDL_Renderer* renderizador) {
     int windowWidth  = 800;
@@ -206,21 +210,23 @@ void startGame (SDL_Renderer* renderizador) {
     player2.texture = imgPlayer2;
     ball.texture = imgBall;
 
-    SDL_AudioSpec paddleHitSpec;
-    Uint32 paddleHitLength;
-    Uint8 *paddleHitBuffer;
+    SDL_AudioSpec wallSpec;
+    Uint32 wallLength;
+    Uint8 *wallBuffer;
+    SDL_LoadWAV("assets/som/WallHit.wav", &wallSpec, &wallBuffer, &wallLength);
+    SDL_AudioDeviceID wallId = SDL_OpenAudioDevice(NULL, 0, &wallSpec, NULL, 0);
 
-    SDL_AudioSpec wallHitSpec;
-    Uint32 wallHitLength;
-    Uint8 *wallHitBuffer;
+    SDL_AudioSpec paddleSpec;
+    Uint32 paddleLength;
+    Uint8 *paddleBuffer;
+    SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleSpec, &paddleBuffer, &paddleLength);
+    SDL_AudioDeviceID paddleId = SDL_OpenAudioDevice(NULL, 0, &paddleSpec, NULL, 0);
 
-    SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleHitSpec, &paddleHitBuffer, &paddleHitLength);
-    SDL_LoadWAV("assets/som/WallHit.wav", &wallHitSpec, &wallHitBuffer, &wallHitLength);
-
-    // open audio device
-    SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
-    SDL_AudioDeviceID wallHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
-
+    SDL_AudioSpec errorSpec;
+    Uint32 errorLength;
+    Uint8 *errorBuffer;
+    SDL_LoadWAV("assets/som/point.wav", &errorSpec, &errorBuffer, &errorLength);
+    SDL_AudioDeviceID errorId = SDL_OpenAudioDevice(NULL, 0, &errorSpec, NULL, 0);
 
     setInitialBallPosition(&ball,windowWidth, windowHeight);
     setInitialPlayersPositions(&player1,&player2);
@@ -248,9 +254,7 @@ void startGame (SDL_Renderer* renderizador) {
         movePlayer(&player2, windowWidth);
 
         if(checkBallCollision(&ball,&player1,&player2)){
-            SDL_ClearQueuedAudio(paddleHitId);
-            SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
-            SDL_PauseAudioDevice(paddleHitId, 0);
+            executaSom(wallId, wallLength, wallBuffer);
         }
 
         SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
@@ -266,6 +270,7 @@ void startGame (SDL_Renderer* renderizador) {
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
                 setInitialPlayersPositions(&player1,&player2);
+                executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;
             case 2:
@@ -273,23 +278,22 @@ void startGame (SDL_Renderer* renderizador) {
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
                 setInitialPlayersPositions(&player1,&player2);
+                executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;
             case 3:
                 waitTimeAfterPoint--;
             break;
             case 4:
-                SDL_ClearQueuedAudio(wallHitId);
-                SDL_QueueAudio(wallHitId, wallHitBuffer, wallHitLength);
-                SDL_PauseAudioDevice(wallHitId, 0);
+                executaSom(paddleId, paddleLength, paddleBuffer);
             break;
         }
     }
-    SDL_ClearQueuedAudio(wallHitId);
-    SDL_ClearQueuedAudio(paddleHitId);
+    SDL_ClearQueuedAudio(wallId);
+    SDL_ClearQueuedAudio(paddleId);
+    SDL_ClearQueuedAudio(errorId);
     SDL_RenderClear(renderizador);
     SDL_DestroyTexture(imgPlayer1);
     SDL_DestroyTexture(imgPlayer2);
     SDL_DestroyTexture(imgBall);
-
 }
