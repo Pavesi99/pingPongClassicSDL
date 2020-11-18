@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <iostream>
+using namespace std;
 
 #ifndef GAME_H
 #define GAME_H
@@ -24,7 +26,6 @@ struct ball {
     SDL_Texture* texture;
 };
 
-//SDL_Texture* criaFonte (SDL_Renderer* renderizador);
 SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador);
 void getPlayersMovement(SDL_Event* evento, player* player1, player* player2);
 void movePlayer(player* player, int windowWidth);

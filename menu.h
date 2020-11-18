@@ -1,4 +1,3 @@
-#include <SDL2/SDL.h>
 #include "game.h"
 
 #ifndef MENU_H

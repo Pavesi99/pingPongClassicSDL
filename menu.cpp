@@ -14,8 +14,21 @@ int carregaMenu (SDL_Renderer* renderizador) {
     SDL_Texture* opcoes = carregaImagemBMP("assets/menu/opcoes.bmp", renderizador);
     SDL_Texture* sair = carregaImagemBMP("assets/menu/sair.bmp", renderizador);
 
+    SDL_AudioSpec paddleHitSpec;
+    Uint32 paddleHitLength;
+    Uint8 *paddleHitBuffer;
+
+    SDL_AudioSpec transitionSpec;
+    Uint32 transitionLength;
+    Uint8 *transitionBuffer;
+
+    SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleHitSpec, &paddleHitBuffer, &paddleHitLength);
+    SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
+
+    SDL_LoadWAV("assets/som/transition.wav", &transitionSpec, &transitionBuffer, &transitionLength);
+    SDL_AudioDeviceID transitionId = SDL_OpenAudioDevice(NULL, 0, &transitionSpec, NULL, 0);
+
     do {
-        //SDL_RenderCopy(renderizador);
         SDL_Event evento;
         while (SDL_PollEvent(&evento)) {
             switch(evento.type) {
@@ -25,11 +38,23 @@ int carregaMenu (SDL_Renderer* renderizador) {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if(evento.button.y > 25 && evento.button.y < 100 && evento.button.x > 299 && evento.button.x < 475) {
+                        SDL_ClearQueuedAudio(transitionId);
+                        SDL_QueueAudio(transitionId, transitionBuffer, transitionLength);
+                        SDL_PauseAudioDevice(transitionId, 0);
+
                         retorno = 0;
                         menu = false;
                     } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
+                        SDL_ClearQueuedAudio(paddleHitId);
+                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+                        SDL_PauseAudioDevice(paddleHitId, 0);
+
                         optionsMenu(renderizador);
                     } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
+                        SDL_ClearQueuedAudio(paddleHitId);
+                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+                        SDL_PauseAudioDevice(paddleHitId, 0);
+
                         retorno = 1;
                         SDL_Quit();
                     }
@@ -66,6 +91,13 @@ void optionsMenu (SDL_Renderer* renderizador) {
     SDL_Texture* velocidade = carregaImagemBMP("assets/menu/velocidadeJogo.bmp", renderizador);
     SDL_Texture* voltar = carregaImagemBMP("assets/menu/volta.bmp", renderizador);
 
+    SDL_AudioSpec paddleHitSpec;
+    Uint32 paddleHitLength;
+    Uint8 *paddleHitBuffer;
+
+    SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleHitSpec, &paddleHitBuffer, &paddleHitLength);
+    SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
+
        do {
            SDL_Event evento;
            while(SDL_PollEvent(&evento)) {
@@ -76,8 +108,16 @@ void optionsMenu (SDL_Renderer* renderizador) {
 
                     case SDL_MOUSEBUTTONDOWN:
                        if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
-                            velocidades(renderizador);
+                           SDL_ClearQueuedAudio(paddleHitId);
+                           SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+                           SDL_PauseAudioDevice(paddleHitId, 0);
+
+                           velocidades(renderizador);
                        } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
+                           SDL_ClearQueuedAudio(paddleHitId);
+                           SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+                           SDL_PauseAudioDevice(paddleHitId, 0);
+
                            opcoes = false;
                        }
                     break;
@@ -110,6 +150,13 @@ void velocidades (SDL_Renderer* renderizador) {
     SDL_Texture* rapido = carregaImagemBMP("assets/menu/modoRapido.bmp", renderizador);
     SDL_Texture* voltar = carregaImagemBMP("assets/menu/volta.bmp", renderizador);
 
+    SDL_AudioSpec paddleHitSpec;
+    Uint32 paddleHitLength;
+    Uint8 *paddleHitBuffer;
+
+    SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleHitSpec, &paddleHitBuffer, &paddleHitLength);
+    SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
+
     do {
         SDL_Event evento;
         while(SDL_PollEvent(&evento)) {
@@ -120,10 +167,22 @@ void velocidades (SDL_Renderer* renderizador) {
 
                  case SDL_MOUSEBUTTONDOWN:
                     if(evento.button.y > 25 && evento.button.y < 80 && evento.button.x > 180 && evento.button.x < 580) {
+                        SDL_ClearQueuedAudio(paddleHitId);
+                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+                        SDL_PauseAudioDevice(paddleHitId, 0);
+
                         vel = false;
                     } else if (evento.button.y > 132  && evento.button.y < 202 && evento.button.x > 180 && evento.button.x < 565) {
+                        SDL_ClearQueuedAudio(paddleHitId);
+                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+                        SDL_PauseAudioDevice(paddleHitId, 0);
+
                         vel = false;
                     } else if (evento.button.y > 250 && evento.button.y < 295 && evento.button.x > 220 && evento.button.x < 440) {
+                        SDL_ClearQueuedAudio(paddleHitId);
+                        SDL_QueueAudio(paddleHitId, paddleHitBuffer, paddleHitLength);
+                        SDL_PauseAudioDevice(paddleHitId, 0);
+
                         vel = false;
                     }
                  break;

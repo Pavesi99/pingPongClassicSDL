@@ -1,19 +1,5 @@
 #include "game.h"
 #include "menu.h"
-#include <SDL2/SDL_ttf.h>
-
-/*SDL_Texture* criaFonte (SDL_Renderer* renderizador, const char* chat) {
-    TTF_Font *fonte = TTF_OpenFont("arial.ttf", 12); // Defne fonte e seu tamanho
-    SDL_Color corFonte = {255, 255, 255, 255}; // Define a cor da fonte
-
-    SDL_Surface* texto = TTF_RenderText_Solid(fonte, chat , corFonte);
-    SDL_Texture* textura = SDL_CreateTextureFromSurface(renderizador, texto);
-
-    SDL_FreeSurface(texto);
-    TTF_CloseFont(fonte);
-
-    return textura;
-}*/
 
 SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador) {
     SDL_Surface* imagem = SDL_LoadBMP(src);
@@ -22,6 +8,7 @@ SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador) {
 
     return textura;
 }
+
 
 void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 switch (evento->type) {
@@ -208,12 +195,10 @@ void startGame (SDL_Renderer* renderizador) {
     bool gameOver = false;
     int waitTimeAfterPoint = 0;
 
-
     player player1;
     player player2;
     ball ball;
 
-    //SDL_Texture* pontuacao = criaFonte(renderizador, "Pontuação");
     SDL_Texture* imgPlayer1 = carregaImagemBMP("assets/elementosJogo/Stick.bmp", renderizador);
     SDL_Texture* imgPlayer2 = carregaImagemBMP("assets/elementosJogo/Stick01.bmp", renderizador);
     SDL_Texture* imgBall = carregaImagemBMP("assets/elementosJogo/Ball.bmp", renderizador);
@@ -245,7 +230,6 @@ void startGame (SDL_Renderer* renderizador) {
      SDL_RenderCopy(renderizador, ball.texture, &ball.origem, &ball.destino);
 
     while (player1.pontos <= 5 && player2.pontos <= 5 && !gameOver) {
-
         SDL_RenderClear(renderizador);
 
         SDL_Event evento;
@@ -306,4 +290,5 @@ void startGame (SDL_Renderer* renderizador) {
     SDL_DestroyTexture(imgPlayer1);
     SDL_DestroyTexture(imgPlayer2);
     SDL_DestroyTexture(imgBall);
+
 }

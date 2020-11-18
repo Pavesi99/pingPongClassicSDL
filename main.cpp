@@ -3,7 +3,6 @@
 #include "menu.h"
 
 #undef main
-using namespace std;
 
 int main()
 {
