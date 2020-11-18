@@ -29,11 +29,13 @@ int carregaMenu (SDL_Renderer* renderizador) {
     SDL_AudioDeviceID transitionId = SDL_OpenAudioDevice(NULL, 0, &transitionSpec, NULL, 0);
 
     do {
+          SDL_RenderClear(renderizador);
         SDL_Event evento;
         while (SDL_PollEvent(&evento)) {
             switch(evento.type) {
                 case SDL_QUIT:
-                    SDL_Quit();
+                SDL_Quit();
+                exit(0);
                 break;
 
                 case SDL_MOUSEBUTTONDOWN:
@@ -99,11 +101,14 @@ void optionsMenu (SDL_Renderer* renderizador) {
     SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
 
        do {
+
+          SDL_RenderClear(renderizador);
            SDL_Event evento;
            while(SDL_PollEvent(&evento)) {
                switch(evento.type) {
                     case SDL_QUIT:
-                        opcoes = false;
+                   SDL_Quit();
+                   exit(0);
                     break;
 
                     case SDL_MOUSEBUTTONDOWN:
@@ -158,11 +163,13 @@ void velocidades (SDL_Renderer* renderizador) {
     SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
 
     do {
+          SDL_RenderClear(renderizador);
         SDL_Event evento;
         while(SDL_PollEvent(&evento)) {
             switch(evento.type) {
                  case SDL_QUIT:
-                     vel = false;
+                     SDL_Quit();
+                     exit(0);
                  break;
 
                  case SDL_MOUSEBUTTONDOWN:
