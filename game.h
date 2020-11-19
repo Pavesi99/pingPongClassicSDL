@@ -2,7 +2,10 @@
 #include <iostream>
 using namespace std;
 
+
+
 #ifndef GAME_H
+
 #define GAME_H
 
 struct player {

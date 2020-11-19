@@ -1,6 +1,8 @@
 #include "game.h"
 #include "menu.h"
 
+int VelocidadeDoJogo = 1;
+
 SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador) {
     SDL_Surface* imagem = SDL_LoadBMP(src);
     SDL_Texture* textura = SDL_CreateTextureFromSurface(renderizador, imagem);
@@ -50,14 +52,14 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
 void movePlayer(player* player, int windowWidth){
 
     if(player->direita){
-        player->destino.x += player->velocidade;
+        player->destino.x += (player->velocidade  * VelocidadeDoJogo);
         if(player->destino.x > (windowWidth - player->destino.w)){
             player->destino.x = (windowWidth - player->destino.w);
         }
     }
 
     if(player->esquerda){
-        player->destino.x -= player->velocidade;
+        player->destino.x -= (player->velocidade * VelocidadeDoJogo);
         if(player->destino.x < 0){
             player->destino.x = 0;
         }
@@ -70,7 +72,7 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
     }
 
     if(ball->direita){
-        ball->destino.x += ball->velocidade;
+        ball->destino.x += (ball->velocidade * VelocidadeDoJogo);
         if(ball->destino.x > (windowWidth - ball->destino.w)){
             ball->direita = false;
             ball->esquerda = true;
@@ -79,7 +81,7 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
     }
 
     if(ball->esquerda){
-        ball->destino.x -= ball->velocidade;
+        ball->destino.x -= (ball->velocidade * VelocidadeDoJogo);
         if(ball->destino.x < 0){
             ball->esquerda = false;
             ball->direita = true;
@@ -88,14 +90,14 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
     }
 
     if(ball->cima){
-        ball->destino.y-= ball->velocidade;
+        ball->destino.y-= (ball->velocidade * VelocidadeDoJogo);
         if(ball->destino.y < 0){
             return 1;
         }
     }
 
     if(ball->baixo){
-        ball->destino.y += ball->velocidade;
+        ball->destino.y += (ball->velocidade * VelocidadeDoJogo);
         if(ball->destino.y > (windowHeight - 10)){
            return 2;
         }
@@ -245,6 +247,13 @@ void startGame (SDL_Renderer* renderizador) {
                 SDL_Quit();
                 exit(0);
                 break;
+            case SDL_KEYDOWN:
+                switch( evento.key.keysym.sym ){
+                    case SDLK_ESCAPE:
+                        gameOver = true;
+                    break;
+                }
+                break;
             }
 
             getPlayersMovement(&evento,&player1,&player2);
@@ -289,6 +298,10 @@ void startGame (SDL_Renderer* renderizador) {
             break;
         }
     }
+
+    SDL_CloseAudioDevice(errorId);
+    SDL_CloseAudioDevice(paddleId);
+    SDL_CloseAudioDevice(wallId);
     SDL_ClearQueuedAudio(wallId);
     SDL_ClearQueuedAudio(paddleId);
     SDL_ClearQueuedAudio(errorId);

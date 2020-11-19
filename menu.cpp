@@ -3,6 +3,9 @@
 
 int windowWidth  = 800;
 int windowHeight = 600;
+int delayMenu = 150;
+
+extern int VelocidadeDoJogo;
 
 int carregaMenu (SDL_Renderer* renderizador) {
     bool menu = true;
@@ -43,15 +46,18 @@ int carregaMenu (SDL_Renderer* renderizador) {
                         executaSom(transitionId, transitionLength, transitionBuffer);
                         retorno = 0;
                         menu = false;
+                        SDL_Delay(delayMenu);
                     } else if (evento.button.y > 142  && evento.button.y < 200 && evento.button.x > 285 && evento.button.x < 475) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         optionsMenu(renderizador);
                     } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         retorno = 1;
+                        SDL_Delay(delayMenu);
                         SDL_Quit();
                         exit(0);
                     }
+                break;
             }
         }
         SDL_Rect iniciarOri = {0, 0, 500, 100};
@@ -70,6 +76,8 @@ int carregaMenu (SDL_Renderer* renderizador) {
     } while (menu);
 
     SDL_RenderClear(renderizador);
+    SDL_CloseAudioDevice(paddleHitId);
+    SDL_CloseAudioDevice(transitionId);
     SDL_DestroyTexture(iniciar);
     SDL_DestroyTexture(opcoes);
     SDL_DestroyTexture(sair);
@@ -110,6 +118,7 @@ void optionsMenu (SDL_Renderer* renderizador) {
                        } else if (evento.button.y > 250 && evento.button.y < 300 && evento.button.x > 299 && evento.button.x < 425) {
                            executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                            opcoes = false;
+                           SDL_Delay(delayMenu);
                        }
                     break;
                }
@@ -129,6 +138,7 @@ void optionsMenu (SDL_Renderer* renderizador) {
 
        SDL_RenderClear(renderizador);
        SDL_DestroyTexture(velocidade);
+       SDL_CloseAudioDevice(paddleHitId);
        SDL_DestroyTexture(voltar);
 }
 
@@ -162,12 +172,17 @@ void velocidades (SDL_Renderer* renderizador) {
                     if(evento.button.y > 25 && evento.button.y < 80 && evento.button.x > 180 && evento.button.x < 580) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         vel = false;
+                        VelocidadeDoJogo = 1;
+                        SDL_Delay(delayMenu);
                     } else if (evento.button.y > 132  && evento.button.y < 202 && evento.button.x > 180 && evento.button.x < 565) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                        VelocidadeDoJogo = 2;
                         vel = false;
+                        SDL_Delay(delayMenu);
                     } else if (evento.button.y > 250 && evento.button.y < 295 && evento.button.x > 220 && evento.button.x < 440) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         vel = false;
+                        SDL_Delay(delayMenu);
                     }
                  break;
             }
@@ -190,6 +205,7 @@ void velocidades (SDL_Renderer* renderizador) {
     } while (vel);
 
     SDL_RenderClear(renderizador);
+    SDL_CloseAudioDevice(paddleHitId);
     SDL_DestroyTexture(normal);
     SDL_DestroyTexture(voltar);
     SDL_DestroyTexture(rapido);
