@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game.h"
+#include "twoPlayers.h"
 #include "menu.h"
 
 #undef main
