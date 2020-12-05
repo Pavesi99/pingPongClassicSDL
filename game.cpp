@@ -60,7 +60,7 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
 
     if(ball->baixo){
         ball->destino.y += (ball->velocidade * VelocidadeDoJogo);
-        if(ball->destino.y > (windowHeight - 10)){
+        if(ball->destino.y > (windowHeight - 25)){
            return 2;
         }
     }

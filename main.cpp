@@ -18,7 +18,7 @@ int main()
     while (running) {
         switch (carregaMenu(renderizador)) {
             case 0:
-                startGame(renderizador);
+                startTwoPlayersGame(renderizador);
             break;
             case 1:
                 running = false;

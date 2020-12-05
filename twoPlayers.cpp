@@ -1,7 +1,5 @@
 #include "game.h"
 
-int VelocidadeDoJogo = 1;
-
 void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 switch (evento->type) {
                 case SDL_KEYDOWN:
@@ -104,7 +102,7 @@ bool checkBallCollision(ball* ball, player* player1, player* player2){
     return false;
 }
 
-void startGame (SDL_Renderer* renderizador) {
+void startTwoPlayersGame (SDL_Renderer* renderizador) {
     int windowWidth  = 800;
     int windowHeight = 600;
     bool gameOver = false;
