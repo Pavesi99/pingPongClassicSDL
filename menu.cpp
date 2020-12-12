@@ -10,7 +10,7 @@ extern int VelocidadeDoJogo;
 int carregaMenu (SDL_Renderer* renderizador) {
     bool menu = true;
     int retorno = 0;
-
+    // teste
     SDL_RenderClear(renderizador);
 
     SDL_Texture* iniciar = carregaImagemBMP("assets/menu/iniciar.bmp", renderizador);
