@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game.h"
+#include "twoPlayers.h"
 #include "menu.h"
 
 #undef main
@@ -18,7 +18,7 @@ int main()
     while (running) {
         switch (carregaMenu(renderizador)) {
             case 0:
-                startGame(renderizador);
+                startTwoPlayersGame(renderizador);
             break;
             case 1:
                 running = false;
