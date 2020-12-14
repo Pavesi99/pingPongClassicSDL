@@ -1,5 +1,4 @@
 #include "menu.h"
-#include "game.h"
 
 int windowWidth  = 800;
 int windowHeight = 600;
