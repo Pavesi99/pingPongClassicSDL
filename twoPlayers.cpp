@@ -111,7 +111,19 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
     player player1;
     player player2;
     ball ball;
+    /*
+    TTF_Font* fonte = TTF_OpenFont("vgafix.ttf", 54);
+    SDL_Color cor = {255, 255, 255, 255};
+    SDL_Surface* fonteTexuture = TTF_RenderText_Solid(fonte, "Pontuação:", cor);
+    SDL_Texture* pontuacao1 = SDL_CreateTextureFromSurface(renderizador, fonteTexuture);
 
+    SDL_FreeSurface(fonteTexuture);
+
+    SDL_Rect rectTexto;
+    rectTexto.x = rectTexto.y = 0;
+
+    SDL_QueryTexture(pontuacao1, NULL, NULL, &rectTexto.w, &rectTexto.h);
+    */
     SDL_Texture* imgPlayer1 = carregaImagemBMP("assets/elementosJogo/Stick.bmp", renderizador);
     SDL_Texture* imgPlayer2 = carregaImagemBMP("assets/elementosJogo/Stick01.bmp", renderizador);
     SDL_Texture* imgBall = carregaImagemBMP("assets/elementosJogo/Ball.bmp", renderizador);
@@ -176,6 +188,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
         SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
         SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
         SDL_RenderCopy(renderizador, ball.texture, &ball.origem, &ball.destino);
+        //SDL_RenderCopy(renderizador, pontuacao1, NULL, &rectTexto);
 
         SDL_RenderPresent(renderizador);
         SDL_Delay(1000 / 60);
@@ -216,4 +229,6 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
     SDL_DestroyTexture(imgPlayer1);
     SDL_DestroyTexture(imgPlayer2);
     SDL_DestroyTexture(imgBall);
+    //SDL_DestroyTexture(pontuacao1);
+    //TTF_CloseFont(fonte);
 }

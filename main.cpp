@@ -18,10 +18,21 @@ int main()
     while (running) {
         switch (carregaMenu(renderizador)) {
             case 0:
-                startTwoPlayersGame(renderizador);
-            break;
-            case 1:
-                running = false;
+                switch(menu(renderizador)) {
+                    case 1:
+                        switch(modeGame(renderizador)) {
+                            case 1:
+                                //SinglePlayer
+                            break;
+                            case 2:
+                                startTwoPlayersGame(renderizador);
+                            break;
+                        }
+
+                    break;
+
+                }
+
             break;
         }
     }

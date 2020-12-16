@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #ifndef GAME_H
-
 #define GAME_H
 
 struct player {
