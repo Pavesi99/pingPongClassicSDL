@@ -3,6 +3,9 @@
 
 int VelocidadeDoJogo = 1;
 
+extern int windowWidth;
+extern int windowHeight;
+
 SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador) {
     SDL_Surface* imagem = SDL_LoadBMP(src);
     SDL_Texture* textura = SDL_CreateTextureFromSurface(renderizador, imagem);
@@ -28,7 +31,7 @@ void movePlayer(player* player, int windowWidth){
     }
 }
 
-int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPoint){
+int moveBall(ball* ball, int windowWidth,  int windowHeight, int* waitTimeAfterPoint){
     if (*waitTimeAfterPoint > 0){
         return 3;
     }
@@ -75,8 +78,8 @@ void setBallDirectionAfterPoint(ball* ball){
 }
 
 void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight){
-    ball->origem.h = 160;
-    ball->origem.w = 300;
+    ball->origem.h = windowHeight / 2;
+    ball->origem.w = windowHeight / 2;
     ball->origem.x = 0;
     ball->origem.y = 0;
 

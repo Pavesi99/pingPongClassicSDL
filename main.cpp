@@ -4,10 +4,11 @@
 
 #undef main
 
+extern int windowWidth;
+extern int windowHeight;
+
 int main()
 {
-    int windowWidth  = 800;
-    int windowHeight = 600;
     bool running = true;
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -27,12 +28,14 @@ int main()
                             case 2:
                                 startTwoPlayersGame(renderizador);
                             break;
+                            case 3:
+                                //Multiplayer
+                            break;
                         }
 
                     break;
 
                 }
-
             break;
         }
     }

@@ -1,5 +1,8 @@
 #include "game.h"
 
+extern int windowWidth;
+extern int windowHeight;
+
 void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 switch (evento->type) {
                 case SDL_KEYDOWN:
@@ -103,14 +106,13 @@ bool checkBallCollision(ball* ball, player* player1, player* player2){
 }
 
 void startTwoPlayersGame (SDL_Renderer* renderizador) {
-    int windowWidth  = 800;
-    int windowHeight = 600;
     bool gameOver = false;
     int waitTimeAfterPoint = 0;
 
     player player1;
     player player2;
     ball ball;
+
     /*
     TTF_Font* fonte = TTF_OpenFont("vgafix.ttf", 54);
     SDL_Color cor = {255, 255, 255, 255};
