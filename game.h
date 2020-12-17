@@ -31,5 +31,7 @@ int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPo
 void setBallDirectionAfterPoint(ball* ball);
 void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight);
 void executaSom (SDL_AudioDeviceID id,  Uint32 length, Uint8 *buffer);
+bool checkBallCollision(ball* ball, player* player1, player* player2);
+void setInitialPlayersPositions(player* player1, player* player2);
 
 #endif // GAME_H
