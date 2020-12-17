@@ -1,5 +1,5 @@
-- master 
+- master :
 Na master esta o codigo fonte do nosso jogo
 
-- Deploy
+- Deploy :
 Na Deploy esta o jogo disponivel para baixar e jogar.
