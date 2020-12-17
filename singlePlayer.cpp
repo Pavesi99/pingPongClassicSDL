@@ -1,15 +1,13 @@
 #include "game.h"
 
-void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
+extern int VelocidadeDoJogo;
+extern int windowHeight;
+extern int windowWidth;
+
+void getPlayerMovement(SDL_Event* evento, player* player1) {
                 switch (evento->type) {
                 case SDL_KEYDOWN:
                     switch( evento->key.keysym.sym ){
-                        case SDLK_LEFT:
-                            player2->esquerda = true;
-                            break;
-                        case SDLK_RIGHT:
-                            player2->direita = true;
-                            break;
                         case SDLK_a:
                             player1->esquerda = true;
                             break;
@@ -20,12 +18,6 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                     break;
                 case SDL_KEYUP:
                     switch( evento->key.keysym.sym ){
-                        case SDLK_LEFT:
-                            player2->esquerda = false;
-                            break;
-                        case SDLK_RIGHT:
-                            player2->direita = false;
-                            break;
                         case SDLK_a:
                             player1->esquerda = false;
                             break;
@@ -37,7 +29,59 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 }
 }
 
-void startTwoPlayersGame (SDL_Renderer* renderizador) {
+void getBotMovement (ball* ball, player* bot) {
+    if(ball->destino.y > (windowHeight - (windowHeight/4))){
+        if(bot->destino.x > (windowWidth/2)){
+            bot->esquerda = true;
+            bot->direita = false;
+        }
+
+        if(bot->destino.x < (windowWidth/2)){
+            bot->direita = true;
+            bot->esquerda = false;
+        }
+
+        if(bot->destino.x == (windowWidth/2)){
+            bot->direita = false;
+            bot->esquerda = false;
+        }
+    }else {
+        if((bot->destino.x + (bot->destino.w/2)) < ball->destino.x){
+                bot->direita = true;
+                bot->esquerda = false;
+
+                if(ball->esquerda && ball->destino.y < (windowHeight/6)){
+                    bot->direita = false;
+                    bot->esquerda = false;
+                }
+        }
+
+        if( (bot->destino.x + (bot->destino.w/2)) > ball->destino.x ){
+                bot->esquerda = true;
+                bot->direita = false;
+
+                if(ball->direita && ball->destino.y < (windowHeight/6)){
+                    bot->direita = false;
+                    bot->esquerda = false;
+                }
+        }
+
+       /* if(ball->destino.y < (windowHeight/2)
+                && ball->destino.y > (windowHeight/3.5)){
+            if(ball->destino.x > (windowWidth - 80)){
+                bot->esquerda = true;
+                bot->direita = false;
+            }
+
+            if(ball->destino.x < 80){
+                bot->direita = true;
+                bot->esquerda = false;
+            }
+        }*/
+    }
+}
+
+void startSinglePlayerGame (SDL_Renderer* renderizador) {
     int windowWidth  = 800;
     int windowHeight = 600;
     bool gameOver = false;
@@ -85,7 +129,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
         SDL_Event evento;
         while(SDL_PollEvent(&evento) > 0){
             switch (evento.type) {
-                case SDL_QUIT: 
+                case SDL_QUIT:
                 SDL_Quit();
                 exit(0);
                 break;
@@ -98,8 +142,10 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
                 break;
             }
 
-            getPlayersMovement(&evento,&player1,&player2);
+            getPlayerMovement(&evento,&player1);
         }
+
+         getBotMovement(&ball, &player2);
 
         movePlayer(&player1, windowWidth);
         movePlayer(&player2, windowWidth);

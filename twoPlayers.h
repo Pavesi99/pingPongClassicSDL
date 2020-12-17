@@ -8,8 +8,6 @@
 
 
 void getPlayersMovement(SDL_Event* evento, player* player1, player* player2);
-void setInitialPlayersPositions(player* player1, player* player2);
-bool checkBallCollision(ball* ball, player* player1, player* player2);
 void startTwoPlayersGame ( SDL_Renderer* renderizador);
 
 
