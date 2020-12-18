@@ -13,7 +13,11 @@ int main()
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    SDL_Window* janela = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0);
+    SDL_Window* janela = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    SDL_GetWindowSize(janela, &windowWidth, &windowHeight);
+
+    std::cout << "W : " << windowWidth << " H : " << windowHeight;
+
     SDL_Renderer* renderizador = SDL_CreateRenderer(janela, -1, SDL_RENDERER_ACCELERATED);
 
     while (running) {

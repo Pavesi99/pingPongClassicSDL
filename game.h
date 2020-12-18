@@ -4,9 +4,12 @@
 #ifndef GAME_H
 #define GAME_H
 
+extern int windowWidth;
+extern int windowHeight;
+
 struct player {
     int pontos = 0;
-    int velocidade = 4;
+    int velocidade = (windowWidth + windowHeight) / 350;
     bool esquerda = false;
     bool direita = false;
     SDL_Rect destino;
@@ -15,7 +18,7 @@ struct player {
 };
 
 struct ball {
-    int velocidade = 5;
+    int velocidade = ((windowWidth + windowHeight) / 350) + 1;
     bool esquerda = false;
     bool direita = false;
     bool cima = true;

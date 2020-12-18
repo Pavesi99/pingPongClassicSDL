@@ -46,12 +46,12 @@ int carregaMenu (SDL_Renderer* renderizador) {
                 break;
 
                 case SDL_MOUSEBUTTONDOWN:
-                    if(evento.button.y > 600 && evento.button.y < 647 && evento.button.x > 513 && evento.button.x < 730) {
+                    if(evento.button.y > (windowHeight / 1.2) && evento.button.y < (windowHeight / 1.11) && evento.button.x > (windowWidth / 2.49) && evento.button.x < (windowWidth / 1.77)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         retorno = 0;
                         SDL_Delay(delayMenu);
                         main = false;
-                    } else if (evento.button.y > 660 && evento.button.y < 712 && evento.button.x > 554 && evento.button.x < 690) {
+                    } else if (evento.button.y > (windowHeight / 1.09) && evento.button.y < (windowHeight / 1.01) && evento.button.x > (windowWidth / 2.31) && evento.button.x < (windowWidth / 1.85)) {
                         SDL_Delay(delayMenu);
                         SDL_Quit();
                         exit(0);
@@ -60,7 +60,7 @@ int carregaMenu (SDL_Renderer* renderizador) {
             }
         }
 
-        SDL_Rect iniciarOri = {0, 0, windowWidth, windowHeight};
+        SDL_Rect iniciarOri = {0, 0, 1280, 720};
         SDL_Rect iniciarDest = {0, 0, windowWidth, windowHeight};
 
         SDL_RenderCopy(renderizador, inicio, &iniciarOri, &iniciarDest);
@@ -103,19 +103,19 @@ int menu (SDL_Renderer* renderizador) {
                     break;
 
                     case SDL_MOUSEBUTTONDOWN:
-                       if (evento.button.y > 193  && evento.button.y < 261 && evento.button.x > 475 && evento.button.x < 788) {
+                       if (evento.button.y > (windowHeight / 3.73)  && evento.button.y < (windowHeight / 2.75) && evento.button.x > (windowWidth / 2.69) && evento.button.x < (windowWidth / 1.62)) {
                            executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                            retorno = 1;
                            SDL_Delay(delayMenu);
                            opcoes = false;
-                       } else if (evento.button.y > 270 && evento.button.y < 333 && evento.button.x > 545 && evento.button.x < 720) {
+                       } else if (evento.button.y > (windowHeight / 2.66) && evento.button.y < (windowHeight / 2.16) && evento.button.x > (windowWidth / 2.34) && evento.button.x < (windowWidth / 1.77)) {
                            executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                            optionsMenu(renderizador);
                            SDL_Delay(delayMenu);
-                       } else if (evento.button.y > 341 && evento.button.y < 407 && evento.button.x > 485 && evento.button.x < 780) {
+                       } else if (evento.button.y > (windowHeight / 2.11) && evento.button.y < (windowHeight / 1.76) && evento.button.x > (windowWidth / 2.63) && evento.button.x < (windowWidth / 1.64)) {
                            executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                            SDL_Delay(delayMenu);
-                       } else if (evento.button.y > 415 && evento.button.y < 473 && evento.button.x > 577 && evento.button.x < 688) {
+                       } else if (evento.button.y > (windowHeight / 1.73) && evento.button.y < (windowHeight / 1.52) && evento.button.x > (windowWidth / 2.21) && evento.button.x < (windowWidth / 1.86)) {
                            executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                            SDL_Delay(delayMenu);
                            SDL_Quit();
@@ -125,7 +125,7 @@ int menu (SDL_Renderer* renderizador) {
                }
            }
 
-           SDL_Rect menuOri = {0, 0, windowWidth, windowHeight};
+           SDL_Rect menuOri = {0, 0, 1280, 720};
            SDL_Rect menuDest = {0, 0, windowWidth, windowHeight};
            SDL_RenderCopy(renderizador, menu, &menuOri, &menuDest);
 
@@ -146,11 +146,11 @@ void optionsMenu (SDL_Renderer* renderizador) {
     SDL_RenderClear(renderizador);
 
     SDL_Texture* som = carregaImagemBMP("assets/menu/opcoes.bmp", renderizador);
-    SDL_Rect somOri = {0, 0, windowWidth, windowHeight};
+    SDL_Rect somOri = {0, 0, 1280, 720};
     SDL_Rect somDest = {0, 0, windowWidth, windowHeight};
 
     SDL_Texture* mute = carregaImagemBMP("assets/menu/opcoesS.bmp", renderizador);
-    SDL_Rect muteOri = {0, 0, windowWidth, windowHeight};
+    SDL_Rect muteOri = {0, 0, 1280, 720};
     SDL_Rect muteDest = {0, 0, windowWidth, windowHeight};
 
     SDL_AudioSpec paddleHitSpec;
@@ -171,21 +171,21 @@ void optionsMenu (SDL_Renderer* renderizador) {
                  break;
 
                  case SDL_MOUSEBUTTONDOWN:
-                    if(evento.button.y > 165 && evento.button.y < 235 && evento.button.x > 408 && evento.button.x < 854) {
+                    if(evento.button.y > (windowHeight / 4.36) && evento.button.y < (windowHeight / 3.06) && evento.button.x > (windowWidth / 3.13) && evento.button.x < (windowWidth / 1.49)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
                         velocidades(renderizador);
-                    } else if (evento.button.y > 244  && evento.button.y < 308 && evento.button.x > 336 && evento.button.x < 930) {
+                    } else if (evento.button.y > (windowHeight / 2.95)  && evento.button.y < (windowHeight / 2.33) && evento.button.x > (windowWidth / 3.80) && evento.button.x < (windowWidth / 1.37)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
-                    } else if (evento.button.y > 314 && evento.button.y < 369 && evento.button.x > 575 && evento.button.x < 683) {
+                    } else if (evento.button.y > (windowHeight / 2.29) && evento.button.y < (windowHeight / 1.95) && evento.button.x > (windowWidth / 2.22) && evento.button.x < (windowWidth / 1.87)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
-                    } else if (evento.button.y > 390 && evento.button.y < 440 && evento.button.x > 550 && evento.button.x < 718) {
+                    } else if (evento.button.y > (windowHeight / 1.84) && evento.button.y < (windowHeight / 1.63) && evento.button.x > (windowWidth / 2.32) && evento.button.x < (windowWidth / 1.78)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
                         options = false;
-                    } else if (evento.button.y > 480 && evento.button.y < 580 && evento.button.x > 570 && evento.button.x < 670) {
+                    } else if (evento.button.y > (windowHeight / 1.5) && evento.button.y < (windowHeight / 1.24) && evento.button.x > (windowWidth / 2.24) && evento.button.x < (windowWidth / 1.91)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_RenderCopy(renderizador, mute, &muteOri, &muteDest);
                         SDL_RenderPresent(renderizador);
@@ -213,7 +213,7 @@ void velocidades (SDL_Renderer* renderizador) {
     SDL_Texture* velocidade = carregaImagemBMP("assets/menu/velocidades.bmp", renderizador);
     SDL_Texture* velocidade1 = carregaImagemBMP("assets/menu/velocidade.bmp", renderizador);
 
-    SDL_Rect velocidadeOri = {0, 0, windowWidth, windowHeight};
+    SDL_Rect velocidadeOri = {0, 0, 1280, 720};
     SDL_Rect velocidadeDest = {0, 0, windowWidth, windowHeight};
 
     SDL_AudioSpec paddleHitSpec;
@@ -234,25 +234,25 @@ void velocidades (SDL_Renderer* renderizador) {
                  break;
 
                  case SDL_MOUSEBUTTONDOWN:
-                    if(evento.button.y > 162 && evento.button.y < 215 && evento.button.x > 445 && evento.button.x < 793) {
+                    if(evento.button.y > (windowHeight / 4.44) && evento.button.y < (windowHeight / 3.34) && evento.button.x > (windowWidth / 2.87) && evento.button.x < (windowWidth / 1.61)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         VelocidadeDoJogo = 1;
                         SDL_RenderCopy(renderizador, velocidade1, &velocidadeOri, &velocidadeDest);
                         SDL_RenderPresent(renderizador);
-                        SDL_Delay(delayMenu * 4);
-                    } else if (evento.button.y > 235  && evento.button.y < 300 && evento.button.x > 457 && evento.button.x < 775) {
+                        SDL_Delay(delayMenu * 5);
+                    } else if (evento.button.y > (windowHeight / 3.06)  && evento.button.y < (windowHeight / 2.4) && evento.button.x > (windowWidth / 2.80) && evento.button.x < (windowWidth / 1.65)) {
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                        VelocidadeDoJogo = 1.5;
+                        SDL_RenderCopy(renderizador, velocidade1, &velocidadeOri, &velocidadeDest);
+                        SDL_RenderPresent(renderizador);
+                        SDL_Delay(delayMenu * 5);
+                    } else if (evento.button.y > (windowHeight / 2.33) && evento.button.y < (windowHeight / 1.97) && evento.button.x > (windowWidth / 2.69) && evento.button.x < (windowWidth / 1.68)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         VelocidadeDoJogo = 2;
                         SDL_RenderCopy(renderizador, velocidade1, &velocidadeOri, &velocidadeDest);
                         SDL_RenderPresent(renderizador);
-                        SDL_Delay(delayMenu * 4);
-                    } else if (evento.button.y > 308 && evento.button.y < 365 && evento.button.x > 475 && evento.button.x < 760) {
-                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
-                        VelocidadeDoJogo = 3;
-                        SDL_RenderCopy(renderizador, velocidade1, &velocidadeOri, &velocidadeDest);
-                        SDL_RenderPresent(renderizador);
-                        SDL_Delay(delayMenu * 4);
-                    } else if (evento.button.y > 450 && evento.button.y < 515 && evento.button.x > 534 && evento.button.x < 707) {
+                        SDL_Delay(delayMenu * 5);
+                    } else if (evento.button.y > (windowHeight / 1.6) && evento.button.y < (windowHeight / 1.39) && evento.button.x > (windowWidth / 2.39) && evento.button.x < (windowWidth / 1.81)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
                         vel = false;
@@ -261,7 +261,7 @@ void velocidades (SDL_Renderer* renderizador) {
             }
         }
 
-        SDL_Rect normalOri = {0, 0, windowWidth, windowHeight};
+        SDL_Rect normalOri = {0, 0, 1280, 720};
         SDL_Rect normalDest = {0, 0, windowWidth, windowHeight};
         SDL_RenderCopy(renderizador, velocidade, &normalOri, &normalDest);
 
@@ -299,22 +299,22 @@ int modeGame (SDL_Renderer* renderizador) {
                  break;
 
                  case SDL_MOUSEBUTTONDOWN:
-                    if (evento.button.y > 188  && evento.button.y < 257 && evento.button.x > 482 && evento.button.x < 787) {
+                    if (evento.button.y > (windowHeight / 3.82)  && evento.button.y < (windowHeight / 2.80) && evento.button.x > (windowWidth / 2.65) && evento.button.x < (windowWidth / 1.62)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         retorno = 1;
                         SDL_Delay(delayMenu);
                         mode = false;
-                    } else if (evento.button.y > 262 && evento.button.y < 330 && evento.button.x > 432 && evento.button.x < 840) {
+                    } else if (evento.button.y > (windowHeight / 2.74) && evento.button.y < (windowHeight / 2.18) && evento.button.x > (windowWidth / 2.96) && evento.button.x < (windowWidth / 1.52)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         retorno = 2;
                         SDL_Delay(delayMenu);
                         mode = false;
-                    } else if (evento.button.y > 337 && evento.button.y < 405 && evento.button.x > 385 && evento.button.x < 880) {
+                    } else if (evento.button.y > (windowHeight / 2.13) && evento.button.y < (windowHeight / 1.77) && evento.button.x > (windowWidth / 3.32) && evento.button.x < (windowWidth / 1.45)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         retorno = 3;
                         SDL_Delay(delayMenu);
                         mode = false;
-                    } else if (evento.button.y > 480 && evento.button.y < 540 && evento.button.x > 550 && evento.button.x < 720) {
+                    } else if (evento.button.y > (windowHeight / 1.5) && evento.button.y < (windowHeight / 1.33) && evento.button.x > (windowWidth / 2.32) && evento.button.x < (windowWidth / 1.77)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
                         mode = false;
@@ -323,7 +323,7 @@ int modeGame (SDL_Renderer* renderizador) {
             }
         }
 
-        SDL_Rect modeOri = {0, 0, windowWidth, windowHeight};
+        SDL_Rect modeOri = {0, 0, 1280, 720};
         SDL_Rect modeDest = {0, 0, windowWidth, windowHeight};
         SDL_RenderCopy(renderizador, modo, &modeOri, &modeDest);
 

@@ -40,15 +40,15 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 }
 }
 
-void setInitialPlayersPositions(player* player1, player* player2){
+void setInitialPlayersPositions(player* player1, player* player2, int windowWidth, int windowHeight){
     player2->origem.h = 200;
     player2->origem.w = 800;
     player2->origem.x = 0;
     player2->origem.y = 0;
 
     player2->destino.h = 40;
-    player2->destino.w = player2->origem.w / 8;
-    player2->destino.x = 300;
+    player2->destino.w = windowWidth / 8;
+    player2->destino.x = windowWidth / 2;
     player2->destino.y = 0;
 
     player1->origem.h = 200;
@@ -57,9 +57,9 @@ void setInitialPlayersPositions(player* player1, player* player2){
     player1->origem.y = 0;
 
     player1->destino.h = 40;
-    player1->destino.w = player1->origem.w / 8;
-    player1->destino.x = 300;
-    player1->destino.y = 570;
+    player1->destino.w = windowWidth / 8;
+    player1->destino.x = windowWidth / 2;
+    player1->destino.y = windowHeight - 30;
 }
 
 bool checkBallCollision(ball* ball, player* player1, player* player2){
@@ -152,7 +152,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
     SDL_AudioDeviceID errorId = SDL_OpenAudioDevice(NULL, 0, &errorSpec, NULL, 0);
 
     setInitialBallPosition(&ball,windowWidth, windowHeight);
-    setInitialPlayersPositions(&player1,&player2);
+    setInitialPlayersPositions(&player1,&player2, windowWidth, windowHeight);
 
      SDL_RenderCopy(renderizador, player1.texture, &player1.origem, &player1.destino);
      SDL_RenderCopy(renderizador, player2.texture, &player2.origem, &player2.destino);
@@ -200,7 +200,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
                 player1.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
-                setInitialPlayersPositions(&player1,&player2);
+                setInitialPlayersPositions(&player1,&player2, windowWidth, windowHeight);
                 executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;
@@ -208,7 +208,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
                 player2.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
-                setInitialPlayersPositions(&player1,&player2);
+                setInitialPlayersPositions(&player1,&player2, windowWidth, windowHeight);
                 executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;
