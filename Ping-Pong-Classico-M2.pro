@@ -30,3 +30,8 @@ win32: LIBS += -L$$PWD/../SDL2_ttf-2.0.15/i686-w64-mingw32/lib/ -lSDL2_ttf
 
 INCLUDEPATH += $$PWD/../SDL2_ttf-2.0.15/i686-w64-mingw32/include
 DEPENDPATH += $$PWD/../SDL2_ttf-2.0.15/i686-w64-mingw32/include
+
+win32: LIBS += -L$$PWD/../SDL2_mixer-2.0.4/i686-w64-mingw32/lib/ -lSDL2_mixer
+
+INCLUDEPATH += $$PWD/../SDL2_mixer-2.0.4/i686-w64-mingw32/include
+DEPENDPATH += $$PWD/../SDL2_mixer-2.0.4/i686-w64-mingw32/include
