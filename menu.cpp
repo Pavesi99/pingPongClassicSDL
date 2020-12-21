@@ -193,7 +193,7 @@ int optionsMenu(SDL_Renderer *renderizador)
                 {
                     executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                     SDL_Delay(delayMenu);
-                    tela(renderizador);
+                    //tela(renderizador);
                 }
                 else if (evento.button.y > (windowHeight / 1.84) && evento.button.y < (windowHeight / 1.63) && evento.button.x > (windowWidth / 2.32) && evento.button.x < (windowWidth / 1.78))
                 {
