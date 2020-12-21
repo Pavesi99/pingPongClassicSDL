@@ -1,19 +1,14 @@
 #include "game.h"
 
-extern int windowWidth;
+extern int VelocidadeDoJogo;
 extern int windowHeight;
+extern int windowWidth;
 extern int points;
 
-void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
+void getPlayerMovement(SDL_Event* evento, player* player1) {
                 switch (evento->type) {
                 case SDL_KEYDOWN:
                     switch( evento->key.keysym.sym ){
-                        case SDLK_LEFT:
-                            player2->esquerda = true;
-                            break;
-                        case SDLK_RIGHT:
-                            player2->direita = true;
-                            break;
                         case SDLK_a:
                             player1->esquerda = true;
                             break;
@@ -24,12 +19,6 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                     break;
                 case SDL_KEYUP:
                     switch( evento->key.keysym.sym ){
-                        case SDLK_LEFT:
-                            player2->esquerda = false;
-                            break;
-                        case SDLK_RIGHT:
-                            player2->direita = false;
-                            break;
                         case SDLK_a:
                             player1->esquerda = false;
                             break;
@@ -41,29 +30,59 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 }
 }
 
-void setInitialPlayersPositions(player* player1, player* player2, int windowWidth, int windowHeight){
-    player2->origem.h = 200;
-    player2->origem.w = 800;
-    player2->origem.x = 0;
-    player2->origem.y = 0;
+void getBotMovement (ball* ball, player* bot) {
+    if(ball->destino.y > (windowHeight - (windowHeight/4))){
+        if(bot->destino.x > (windowWidth/2)){
+            bot->esquerda = true;
+            bot->direita = false;
+        }
 
-    player2->destino.h = 40;
-    player2->destino.w = windowWidth / 8;
-    player2->destino.x = windowWidth / 2;
-    player2->destino.y = 0;
+        if(bot->destino.x < (windowWidth/2)){
+            bot->direita = true;
+            bot->esquerda = false;
+        }
 
-    player1->origem.h = 200;
-    player1->origem.w = 800;
-    player1->origem.x = 0;
-    player1->origem.y = 0;
+        if(bot->destino.x == (windowWidth/2)){
+            bot->direita = false;
+            bot->esquerda = false;
+        }
+    }else {
+        if((bot->destino.x + (bot->destino.w/2)) < ball->destino.x){
+                bot->direita = true;
+                bot->esquerda = false;
 
-    player1->destino.h = 40;
-    player1->destino.w = windowWidth / 8;
-    player1->destino.x = windowWidth / 2;
-    player1->destino.y = windowHeight - 30;
+                if(ball->esquerda && ball->destino.y < (windowHeight/6)){
+                    bot->direita = false;
+                    bot->esquerda = false;
+                }
+        }
+
+        if( (bot->destino.x + (bot->destino.w/2)) > ball->destino.x ){
+                bot->esquerda = true;
+                bot->direita = false;
+
+                if(ball->direita && ball->destino.y < (windowHeight/6)){
+                    bot->direita = false;
+                    bot->esquerda = false;
+                }
+        }
+
+        /*if(ball->destino.y < (windowHeight/2)
+                && ball->destino.y > (windowHeight/3.5)){
+            if(ball->destino.x > (windowWidth - 80)){
+                bot->esquerda = true;
+                bot->direita = false;
+            }
+
+            if(ball->destino.x < 80){
+                bot->direita = true;
+                bot->esquerda = false;
+            }
+        }*/
+    }
 }
 
-void startTwoPlayersGame (SDL_Renderer* renderizador) {
+void startSinglePlayerGame (SDL_Renderer* renderizador) {
     bool gameOver = false;
     int waitTimeAfterPoint = 0;
 
@@ -71,19 +90,6 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
     player player2;
     ball ball;
 
-    /*
-    TTF_Font* fonte = TTF_OpenFont("vgafix.ttf", 54);
-    SDL_Color cor = {255, 255, 255, 255};
-    SDL_Surface* fonteTexuture = TTF_RenderText_Solid(fonte, "Pontuação:", cor);
-    SDL_Texture* pontuacao1 = SDL_CreateTextureFromSurface(renderizador, fonteTexuture);
-
-    SDL_FreeSurface(fonteTexuture);
-
-    SDL_Rect rectTexto;
-    rectTexto.x = rectTexto.y = 0;
-
-    SDL_QueryTexture(pontuacao1, NULL, NULL, &rectTexto.w, &rectTexto.h);
-    */
     SDL_Texture* imgPlayer1 = carregaImagemBMP("assets/elementosJogo/Stick.bmp", renderizador);
     SDL_Texture* imgPlayer2 = carregaImagemBMP("assets/elementosJogo/Stick01.bmp", renderizador);
     SDL_Texture* imgBall = carregaImagemBMP("assets/elementosJogo/Ball.bmp", renderizador);
@@ -110,7 +116,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
     SDL_AudioDeviceID errorId = SDL_OpenAudioDevice(NULL, 0, &errorSpec, NULL, 0);
 
     setInitialBallPosition(&ball,windowWidth, windowHeight);
-    setInitialPlayersPositions(&player1,&player2, windowWidth, windowHeight);
+    setInitialPlayersPositions(&player1,&player2);
 
      SDL_RenderCopy(renderizador, player1.texture, &player1.origem, &player1.destino);
      SDL_RenderCopy(renderizador, player2.texture, &player2.origem, &player2.destino);
@@ -122,7 +128,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
         SDL_Event evento;
         while(SDL_PollEvent(&evento) > 0){
             switch (evento.type) {
-                case SDL_QUIT: 
+                case SDL_QUIT:
                 SDL_Quit();
                 exit(0);
                 break;
@@ -135,8 +141,10 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
                 break;
             }
 
-            getPlayersMovement(&evento,&player1,&player2);
+            getPlayerMovement(&evento,&player1);
         }
+
+         getBotMovement(&ball, &player2);
 
         movePlayer(&player1, windowWidth);
         movePlayer(&player2, windowWidth);
@@ -148,7 +156,6 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
         SDL_RenderCopy(renderizador, player2.texture, &player2.origem,&player2.destino );
         SDL_RenderCopy(renderizador, player1.texture, &player1.origem,&player1.destino );
         SDL_RenderCopy(renderizador, ball.texture, &ball.origem, &ball.destino);
-        //SDL_RenderCopy(renderizador, pontuacao1, NULL, &rectTexto);
 
         SDL_RenderPresent(renderizador);
         SDL_Delay(1000 / 60);
@@ -158,7 +165,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
                 player1.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
-                setInitialPlayersPositions(&player1,&player2, windowWidth, windowHeight);
+                setInitialPlayersPositions(&player1,&player2);
                 executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;
@@ -166,7 +173,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
                 player2.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
-                setInitialPlayersPositions(&player1,&player2, windowWidth, windowHeight);
+                setInitialPlayersPositions(&player1,&player2);
                 executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;
@@ -192,6 +199,7 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
         }
     }
 
+    SDL_DestroyTexture(vencer);
     SDL_CloseAudioDevice(errorId);
     SDL_CloseAudioDevice(paddleId);
     SDL_CloseAudioDevice(wallId);
@@ -202,6 +210,4 @@ void startTwoPlayersGame (SDL_Renderer* renderizador) {
     SDL_DestroyTexture(imgPlayer1);
     SDL_DestroyTexture(imgPlayer2);
     SDL_DestroyTexture(imgBall);
-    //SDL_DestroyTexture(pontuacao1);
-    //TTF_CloseFont(fonte);
 }

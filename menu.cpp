@@ -1,8 +1,9 @@
 #include "menu.h"
 
-int windowWidth  = 800;
-int windowHeight = 600;
+int windowWidth  = 1920;
+int windowHeight = 1080;
 int delayMenu = 150;
+int points = 5;
 
 extern int VelocidadeDoJogo;
 
@@ -18,25 +19,11 @@ int carregaMenu (SDL_Renderer* renderizador) {
     Uint32 paddleHitLength;
     Uint8 *paddleHitBuffer;
 
-    SDL_AudioSpec transitionSpec;
-    Uint32 transitionLength;
-    Uint8 *transitionBuffer;
-
-    SDL_AudioSpec temaSpec;
-    Uint32 temaLength;
-    Uint8 *temaBuffer;
-
     SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleHitSpec, &paddleHitBuffer, &paddleHitLength);
     SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
 
-    SDL_LoadWAV("assets/som/transition.wav", &transitionSpec, &transitionBuffer, &transitionLength);
-    SDL_AudioDeviceID transitionId = SDL_OpenAudioDevice(NULL, 0, &transitionSpec, NULL, 0);
-
-    SDL_LoadWAV("assets/som/tema2.wav", &temaSpec, &temaBuffer, &temaLength);
-    SDL_AudioDeviceID temaId = SDL_OpenAudioDevice(NULL, 0, &temaSpec, NULL, 0);
-
     do {
-          SDL_RenderClear(renderizador);
+        SDL_RenderClear(renderizador);
         SDL_Event evento;
         while (SDL_PollEvent(&evento)) {
             switch(evento.type) {
@@ -47,7 +34,7 @@ int carregaMenu (SDL_Renderer* renderizador) {
 
                 case SDL_MOUSEBUTTONDOWN:
                     if(evento.button.y > (windowHeight / 1.2) && evento.button.y < (windowHeight / 1.11) && evento.button.x > (windowWidth / 2.49) && evento.button.x < (windowWidth / 1.77)) {
-                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                        //executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         retorno = 0;
                         SDL_Delay(delayMenu);
                         main = false;
@@ -57,6 +44,7 @@ int carregaMenu (SDL_Renderer* renderizador) {
                         exit(0);
                     }
                 break;
+
             }
         }
 
@@ -68,12 +56,9 @@ int carregaMenu (SDL_Renderer* renderizador) {
 
     } while (main);
 
-    //Mix_FreeMusic(background);
     SDL_RenderClear(renderizador);
     SDL_CloseAudioDevice(paddleHitId);
-    SDL_CloseAudioDevice(transitionId);
     SDL_DestroyTexture(inicio);
-
     return retorno;
 }
 
@@ -114,6 +99,7 @@ int menu (SDL_Renderer* renderizador) {
                            SDL_Delay(delayMenu);
                        } else if (evento.button.y > (windowHeight / 2.11) && evento.button.y < (windowHeight / 1.76) && evento.button.x > (windowWidth / 2.63) && evento.button.x < (windowWidth / 1.64)) {
                            executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                           help(renderizador);
                            SDL_Delay(delayMenu);
                        } else if (evento.button.y > (windowHeight / 1.73) && evento.button.y < (windowHeight / 1.52) && evento.button.x > (windowWidth / 2.21) && evento.button.x < (windowWidth / 1.86)) {
                            executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
@@ -140,9 +126,10 @@ int menu (SDL_Renderer* renderizador) {
        return retorno;
 }
 
-void optionsMenu (SDL_Renderer* renderizador) {
+int optionsMenu (SDL_Renderer* renderizador) {
     bool options = true;
     bool muted = false;
+    int retorno = 2;
 
     SDL_RenderClear(renderizador);
 
@@ -182,14 +169,24 @@ void optionsMenu (SDL_Renderer* renderizador) {
                     } else if (evento.button.y > (windowHeight / 2.29) && evento.button.y < (windowHeight / 1.95) && evento.button.x > (windowWidth / 2.22) && evento.button.x < (windowWidth / 1.87)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
+                        pontos(renderizador);
                     } else if (evento.button.y > (windowHeight / 1.84) && evento.button.y < (windowHeight / 1.63) && evento.button.x > (windowWidth / 2.32) && evento.button.x < (windowWidth / 1.78)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
                         options = false;
                     } else if (evento.button.y > (windowHeight / 1.5) && evento.button.y < (windowHeight / 1.24) && evento.button.x > (windowWidth / 2.24) && evento.button.x < (windowWidth / 1.91)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
-                        SDL_RenderCopy(renderizador, mute, &muteOri, &muteDest);
-                        SDL_RenderPresent(renderizador);
+
+                        if (muted) {
+                            Mix_VolumeMusic(100);
+                            muted = false;
+                        } else {
+                            SDL_RenderClear(renderizador);
+                            SDL_RenderCopy(renderizador, mute, &muteOri, &muteDest);
+                            SDL_RenderPresent(renderizador);
+                            Mix_VolumeMusic(0);
+                            muted = true;
+                        }
                         SDL_Delay(delayMenu);
                     }
                  break;
@@ -204,6 +201,7 @@ void optionsMenu (SDL_Renderer* renderizador) {
     SDL_DestroyTexture(som);
     SDL_CloseAudioDevice(paddleHitId);
 
+    return retorno;
 }
 
 void velocidades (SDL_Renderer* renderizador) {
@@ -336,18 +334,13 @@ int modeGame (SDL_Renderer* renderizador) {
 }
 
 
-int tela (SDL_Window* janela, SDL_Renderer* renderizador) {
+void pontos (SDL_Renderer* renderizador) {
     bool options = true;
-
     SDL_RenderClear(renderizador);
 
-    SDL_Texture* som = carregaImagemBMP("assets/menu/opcoes.bmp", renderizador);
+    SDL_Texture* som = carregaImagemBMP("assets/menu/pontos.bmp", renderizador);
     SDL_Rect somOri = {0, 0, 1280, 720};
     SDL_Rect somDest = {0, 0, windowWidth, windowHeight};
-
-    SDL_Texture* mute = carregaImagemBMP("assets/menu/opcoesS.bmp", renderizador);
-    SDL_Rect muteOri = {0, 0, 1280, 720};
-    SDL_Rect muteDest = {0, 0, windowWidth, windowHeight};
 
     SDL_AudioSpec paddleHitSpec;
     Uint32 paddleHitLength;
@@ -367,14 +360,19 @@ int tela (SDL_Window* janela, SDL_Renderer* renderizador) {
                  break;
 
                  case SDL_MOUSEBUTTONDOWN:
-                    if(evento.button.y > (windowHeight / 4.36) && evento.button.y < (windowHeight / 3.06) && evento.button.x > (windowWidth / 3.13) && evento.button.x < (windowWidth / 1.49)) {
+                    if(evento.button.y > (windowHeight / 4.5) && evento.button.y < (windowHeight / 3.2) && evento.button.x > (windowWidth / 2.62) && evento.button.x < (windowWidth / 1.64)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                        points = 3;
                         SDL_Delay(delayMenu);
-                        velocidades(renderizador);
-                    } else if (evento.button.y > (windowHeight / 2.95)  && evento.button.y < (windowHeight / 2.33) && evento.button.x > (windowWidth / 3.80) && evento.button.x < (windowWidth / 1.37)) {
+                    } else if (evento.button.y > (windowHeight / 3.06)  && evento.button.y < (windowHeight / 2.42) && evento.button.x > (windowWidth / 2.62) && evento.button.x < (windowWidth / 1.60)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                        points = 5;
                         SDL_Delay(delayMenu);
-                    } else if (evento.button.y > (windowHeight / 1.84) && evento.button.y < (windowHeight / 1.63) && evento.button.x > (windowWidth / 2.32) && evento.button.x < (windowWidth / 1.78)) {
+                    }  else if (evento.button.y > (windowHeight / 2.36) && evento.button.y < (windowHeight / 1.92) && evento.button.x > (windowWidth / 2.53) && evento.button.x < (windowWidth / 1.67)) {
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                        points = 10;
+                        SDL_Delay(delayMenu);
+                    }  else if (evento.button.y > (windowHeight / 1.60) && evento.button.y < (windowHeight / 1.41) && evento.button.x > (windowWidth / 2.29) && evento.button.x < (windowWidth / 1.76)) {
                         executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
                         SDL_Delay(delayMenu);
                         options = false;
@@ -387,8 +385,53 @@ int tela (SDL_Window* janela, SDL_Renderer* renderizador) {
         SDL_RenderPresent(renderizador);
     } while (options);
 
-    SDL_DestroyTexture(mute);
     SDL_DestroyTexture(som);
     SDL_CloseAudioDevice(paddleHitId);
 
+
+
+}
+
+void help (SDL_Renderer* renderizador) {
+    bool options = true;
+
+    SDL_RenderClear(renderizador);
+
+    SDL_Texture* help = carregaImagemBMP("assets/menu/help.bmp", renderizador);
+    SDL_Rect somOri = {0, 0, 1280, 720};
+    SDL_Rect somDest = {0, 0, windowWidth, windowHeight};
+
+    SDL_AudioSpec paddleHitSpec;
+    Uint32 paddleHitLength;
+    Uint8 *paddleHitBuffer;
+
+    SDL_LoadWAV("assets/som/PaddleHit.wav", &paddleHitSpec, &paddleHitBuffer, &paddleHitLength);
+    SDL_AudioDeviceID paddleHitId = SDL_OpenAudioDevice(NULL, 0, &paddleHitSpec, NULL, 0);
+
+    do {
+        SDL_RenderClear(renderizador);
+        SDL_Event evento;
+        while(SDL_PollEvent(&evento)) {
+            switch(evento.type) {
+                 case SDL_QUIT:
+                     SDL_Quit();
+                     exit(0);
+                 break;
+
+                 case SDL_MOUSEBUTTONDOWN:
+                    if(evento.button.y > (windowHeight / 1.11) && evento.button.y < (windowHeight / 1.02) && evento.button.x > (windowWidth / 2.22) && evento.button.x < (windowWidth / 1.72)) {
+                        executaSom(paddleHitId, paddleHitLength, paddleHitBuffer);
+                        SDL_Delay(delayMenu);
+                        options = false;
+                    }
+                 break;
+            }
+        }
+
+        SDL_RenderCopy(renderizador, help, &somOri, &somDest);
+        SDL_RenderPresent(renderizador);
+    } while (options);
+
+    SDL_DestroyTexture(help);
+    SDL_CloseAudioDevice(paddleHitId);
 }
