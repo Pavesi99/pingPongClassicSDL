@@ -51,7 +51,7 @@ void getBotMovement (ball* ball, player* bot) {
                 bot->direita = true;
                 bot->esquerda = false;
 
-                if(ball->esquerda && ball->destino.y < (windowHeight/6)){
+                if(ball->esquerda && ball->destino.y > (windowHeight/6)){
                     bot->direita = false;
                     bot->esquerda = false;
                 }
@@ -61,7 +61,7 @@ void getBotMovement (ball* ball, player* bot) {
                 bot->esquerda = true;
                 bot->direita = false;
 
-                if(ball->direita && ball->destino.y < (windowHeight/6)){
+                if(ball->direita && ball->destino.y > (windowHeight/6)){
                     bot->direita = false;
                     bot->esquerda = false;
                 }
@@ -116,7 +116,7 @@ void startSinglePlayerGame (SDL_Renderer* renderizador) {
     SDL_AudioDeviceID errorId = SDL_OpenAudioDevice(NULL, 0, &errorSpec, NULL, 0);
 
     setInitialBallPosition(&ball,windowWidth, windowHeight);
-    setInitialPlayersPositions(&player1,&player2);
+    setInitialPlayersPositions(&player1,&player2,windowWidth,windowHeight);
 
      SDL_RenderCopy(renderizador, player1.texture, &player1.origem, &player1.destino);
      SDL_RenderCopy(renderizador, player2.texture, &player2.origem, &player2.destino);
@@ -165,7 +165,7 @@ void startSinglePlayerGame (SDL_Renderer* renderizador) {
                 player1.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
-                setInitialPlayersPositions(&player1,&player2);
+                setInitialPlayersPositions(&player1,&player2,windowWidth, windowHeight);
                 executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;
@@ -173,7 +173,7 @@ void startSinglePlayerGame (SDL_Renderer* renderizador) {
                 player2.pontos++;
                 setBallDirectionAfterPoint(&ball);
                 setInitialBallPosition(&ball,windowWidth, windowHeight);
-                setInitialPlayersPositions(&player1,&player2);
+                setInitialPlayersPositions(&player1,&player2,windowWidth, windowHeight);
                 executaSom(errorId, errorLength, errorBuffer);
                 waitTimeAfterPoint = 180;
             break;

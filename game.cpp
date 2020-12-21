@@ -14,7 +14,7 @@ SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador) {
     return textura;
 }
 
-void setInitialPlayersPositions(player* player1, player* player2){
+void setInitialPlayersPositions(player* player1, player* player2, int windowWidth, int windowHeight){
     player2->origem.h = 200;
     player2->origem.w = 800;
     player2->origem.x = 0;

@@ -1,11 +1,9 @@
 #include "singlePlayer.h"
 #include "twoPlayers.h"
 #include "menu.h"
+#include "game.h"
 
 #undef main
-
-extern int windowWidth;
-extern int windowHeight;
 
 extern int windowHeight;
 extern int windowWidth;
@@ -16,7 +14,7 @@ int main()
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    SDL_Window* janela = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_FULLSCREEN);
+    SDL_Window *janela = SDL_CreateWindow("Ping Pong Classico", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_FULLSCREEN_DESKTOP);
     SDL_GetWindowSize(janela, &windowWidth, &windowHeight);
 
     SDL_Renderer* renderizador = SDL_CreateRenderer(janela, -1, SDL_RENDERER_ACCELERATED);
@@ -43,6 +41,11 @@ int main()
                             break;
                         }
                     break;
+                case 3:
+                    //Multiplayer
+                    break;
+                }
+                break;
 
                     case 2:
                         switch(optionsMenu(renderizador)) {

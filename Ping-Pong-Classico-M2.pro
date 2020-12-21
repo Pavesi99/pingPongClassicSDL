@@ -38,3 +38,10 @@ win32: LIBS += -L$$PWD/../SDL2_mixer-2.0.4/i686-w64-mingw32/lib/ -lSDL2_mixer
 
 INCLUDEPATH += $$PWD/../SDL2_mixer-2.0.4/i686-w64-mingw32/include
 DEPENDPATH += $$PWD/../SDL2_mixer-2.0.4/i686-w64-mingw32/include
+
+macx: LIBS += -L$$PWD/../../../../../usr/local/Cellar/sdl2_mixer/2.0.4/lib/ -lSDL2_mixer
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/Cellar/sdl2_mixer/2.0.4/include
+DEPENDPATH += $$PWD/../../../../../usr/local/Cellar/sdl2_mixer/2.0.4/include
+
+macx: PRE_TARGETDEPS += $$PWD/../../../../../usr/local/Cellar/sdl2_mixer/2.0.4/lib/libSDL2_mixer.a

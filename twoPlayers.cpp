@@ -41,28 +41,6 @@ void getPlayersMovement(SDL_Event* evento, player* player1, player* player2) {
                 }
 }
 
-void setInitialPlayersPositions(player* player1, player* player2, int windowWidth, int windowHeight){
-    player2->origem.h = 200;
-    player2->origem.w = 800;
-    player2->origem.x = 0;
-    player2->origem.y = 0;
-
-    player2->destino.h = 40;
-    player2->destino.w = windowWidth / 8;
-    player2->destino.x = windowWidth / 2;
-    player2->destino.y = 0;
-
-    player1->origem.h = 200;
-    player1->origem.w = 800;
-    player1->origem.x = 0;
-    player1->origem.y = 0;
-
-    player1->destino.h = 40;
-    player1->destino.w = windowWidth / 8;
-    player1->destino.x = windowWidth / 2;
-    player1->destino.y = windowHeight - 30;
-}
-
 void startTwoPlayersGame (SDL_Renderer* renderizador) {
     bool gameOver = false;
     int waitTimeAfterPoint = 0;
