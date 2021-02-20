@@ -1,13 +1,15 @@
 #include <iostream>
-#include "game.h"
+#include "singlePlayer.h"
+#include "twoPlayers.h"
 #include "menu.h"
 
 #undef main
 
+extern int windowHeight;
+extern int windowWidth;
+
 int main()
 {
-    int windowWidth  = 800;
-    int windowHeight = 600;
     bool running = true;
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -18,7 +20,7 @@ int main()
     while (running) {
         switch (carregaMenu(renderizador)) {
             case 0:
-                startGame(renderizador);
+                startSinglePlayerGame(renderizador);
             break;
             case 1:
                 running = false;

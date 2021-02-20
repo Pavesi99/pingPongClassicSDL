@@ -1,8 +1,4 @@
 #include <SDL2/SDL.h>
-#include <iostream>
-using namespace std;
-
-
 
 #ifndef GAME_H
 
@@ -30,15 +26,12 @@ struct ball {
 };
 
 SDL_Texture* carregaImagemBMP (const char* src, SDL_Renderer* renderizador);
-void getPlayersMovement(SDL_Event* evento, player* player1, player* player2);
 void movePlayer(player* player, int windowWidth);
 int moveBall(ball* ball, int windowWidth, int windowHeight, int* waitTimeAfterPoint = 0 );
-void setInitialPlayersPositions(player* player1, player* player2);
 void setBallDirectionAfterPoint(ball* ball);
 void setInitialBallPosition(ball* ball,int windowWidth, int windowHeight);
-bool checkBallCollision(ball* ball, player* player1, player* player2);
 void executaSom (SDL_AudioDeviceID id,  Uint32 length, Uint8 *buffer);
-void startGame ( SDL_Renderer* renderizador);
-ball attMoves (player* jogador, ball* bola);
+bool checkBallCollision(ball* ball, player* player1, player* player2);
+void setInitialPlayersPositions(player* player1, player* player2);
 
 #endif // GAME_H
